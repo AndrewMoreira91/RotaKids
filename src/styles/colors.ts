@@ -1,17 +1,24 @@
 export const colors = {
   white: "#E1E1E6",
 
-  gray: {
-    200: "#C4C4CC",
-    300: "#8D8D99",
+  ink: {
+    normal: "#000000",
+    light: "#656266",
   },
 
-  green: {
-    500: "#00292E",
-    400: "#28494E",
-    200: "#9FF9CC",
+  gray: {
+    25: "#FFFFFF",
+    50: "#F7F7F7",
+    75: "#EFECF0",
+    100: "#EFEFEF",
+    200: "#EFECF0",
+    300: "#CCCCCC",
+    400: "#B1B1B1",
+    500: "#727272"
   },
-  orange: {
-    500: "#F48F56",
-  },
+
+  blue: {
+    500: "#07A0EC",
+    900: "#092F5E"
+  }
 }

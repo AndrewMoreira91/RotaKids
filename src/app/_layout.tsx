@@ -8,6 +8,7 @@ import {
 	NunitoSans_600SemiBold,
 	NunitoSans_700Bold,
 } from "@expo-google-fonts/nunito-sans"
+import Loading from "@/components/loading";
 
 export default function Layout() {
 
@@ -18,7 +19,7 @@ export default function Layout() {
   });
 
 	if (!fontsLoaded) {
-		return null
+		return <Loading />;
 	}
 
 	return <Slot />
