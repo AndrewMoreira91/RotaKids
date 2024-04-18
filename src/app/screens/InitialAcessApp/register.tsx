@@ -5,8 +5,12 @@ import { Alert, StatusBar, Text, View } from "react-native";
 
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types/reactNavigationTypes";
 
-export default function CheckTel() {
+type Props = NativeStackScreenProps<RootStackParamList, "Register">;
+
+export default function Register({ navigation }: Props) {
 
 	const [isDisabled, setIsDisabled] = useState(false)
 
@@ -64,7 +68,7 @@ export default function CheckTel() {
 		// 	return Alert.alert("Sobrenome inválido")
 		// }
 
-		router.push("/privacyPolicies")
+		navigation.navigate("PrivacyPolicy")
 	}
 
 	return (

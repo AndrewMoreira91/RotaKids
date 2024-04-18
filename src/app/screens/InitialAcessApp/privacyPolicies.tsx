@@ -5,11 +5,16 @@ import { router } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons"
 import { Checkbox } from "expo-checkbox"
 
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types/reactNavigationTypes";
+
 import { colors } from "@/styles/colors";
 
 import Button from "@/components/button";
 
-function PrivacyPolicies() {
+type Props = NativeStackScreenProps<RootStackParamList, "PrivacyPolicy">;
+
+function PrivacyPolicies({ navigation }: Props) {
 
 	const [checked, setChecked] = useState(false);
 
@@ -26,7 +31,7 @@ function PrivacyPolicies() {
 
 	function handleNext() {
 		if (checked === true) {
-			router.push("/sendDocuments")
+			navigation.navigate("SendDocuments")
 		}
 	}
 

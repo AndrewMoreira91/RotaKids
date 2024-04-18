@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
-import { router } from "expo-router";
 // import { startOtpListener, removeListener } from "react-native-otp-verify"
 
 import { Alert, StatusBar, Text, View } from "react-native";
 
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types/reactNavigationTypes";
+
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
+import formatTel from "@/utils/formatTel";
 
-export default function CheckTel() {
+export type Props = NativeStackScreenProps<RootStackParamList, "CheckCode">;
+
+export default function CheckCode({ navigation, route }: Props) {
 
 	const [code, setCode] = useState<string>("")
 	
 	const [isDisabled, setIsDisabled] = useState(false)
+
+	const [tel] = useState(route.params.tel)
+	console.log("tel", tel)
 
 	// function getOtpCode(message: string) {
 	// 	if (message) {
@@ -32,12 +40,11 @@ export default function CheckTel() {
 	// }, [])
 
 	function handleNext() {
-		if (!code) {
-			Alert.alert("Codigo", "Por favor, insira um código válido.")
-		}
+		// if (!code) {
+		// 	Alert.alert("Codigo", "Por favor, insira um código válido.")
+		// }
 		
-		router.push("/register")
-	
+		navigation.navigate("Register")
 	}
 
 	return (
@@ -46,7 +53,7 @@ export default function CheckTel() {
 
 			<View className="mt-10 gap-4">
 				<Text className="font-semibold text-2xl">
-					Coloque o codigo com 4 digitos enviados para (11) 95417-8745
+					Coloque o codigo com 4 digitos enviados para {formatTel(tel ? tel.toString() : "")}
 				</Text>
 
 				<View className="flex-row gap-4 w-full">
@@ -101,7 +108,7 @@ export default function CheckTel() {
 				<ButtonPill
 					theme="secondary"
 					arrowIcon="left"
-					onPress={() => router.back()}
+					onPress={() => navigation.goBack()}
 				/>
 				<ButtonPill
 					title="Next"

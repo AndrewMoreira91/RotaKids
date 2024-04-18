@@ -1,6 +1,6 @@
 import "@/styles/global.css";
 
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 
 import {
 	useFonts,
@@ -16,7 +16,7 @@ export default function Layout() {
 		NunitoSans_400Regular,
 		NunitoSans_600SemiBold,
 		NunitoSans_700Bold,
-  });
+	});
 
 	if (!fontsLoaded) {
 		return <Loading />;

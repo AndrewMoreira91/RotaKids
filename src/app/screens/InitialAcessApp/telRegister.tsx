@@ -2,12 +2,17 @@ import { useState } from "react";
 import { router } from "expo-router";
 import { Alert, StatusBar, Text, View } from "react-native";
 
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types/reactNavigationTypes";
+
 import formatTel from "@/utils/formatTel";
 
 import { Input } from "@/components/input";
 import ButtonPill from "@/components/buttonPill";
 
-export default function TelRegister() {
+export type Props = NativeStackScreenProps<RootStackParamList, "TelRegister">;
+
+export default function TelRegister({ navigation }: Props ) {
 	const [tel, setTel] = useState<number | null>(null)
 
 	const [isDisabled, setIsDisabled] = useState(false)
@@ -24,11 +29,11 @@ export default function TelRegister() {
 	}
 
 	async function handleNext() {
-		// if (!tel) {
-		// 	Alert.alert("Telefone", "Por favor, insira um número de telefone válido.")
-		// }
+		if (!tel) {
+			Alert.alert("Telefone", "Por favor, insira um número de telefone válido.")
+		}
 		
-		router.push("/checkTel")
+		navigation.navigate("CheckCode", { tel })
 	}
 
 	return (
@@ -63,7 +68,7 @@ export default function TelRegister() {
 					<ButtonPill
 						theme="secondary"
 						arrowIcon="left"
-						onPress={() => router.back()}
+						onPress={() => navigation.popToTop()}
 					/>
 					<ButtonPill
 						title="Next"
