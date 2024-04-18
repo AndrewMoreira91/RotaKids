@@ -1,6 +1,5 @@
 export default function formatCPF(value: string) {
 	if (value === null || value === undefined || value === "") {
-		console.log("value is empty")
 		return ""
 	}	
 	value = value.replace(/\D/g, "")
