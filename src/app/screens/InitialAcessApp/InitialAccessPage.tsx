@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { FontAwesome } from "@expo/vector-icons"
 
-import { View, Text, StatusBar, Alert, SafeAreaView } from "react-native"
+import { View, Text, StatusBar, Alert } from "react-native"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamList } from "@/types/reactNavigationTypes"
@@ -18,7 +18,7 @@ export default function InitialAccessPage({ navigation }: Props) {
 
   const [cpf, setCpf] = useState<number | null>(null)
 
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
 
   function handleCpfChange(value: string) {
     value = value.replace(/\D/g, "")
@@ -32,19 +32,19 @@ export default function InitialAccessPage({ navigation }: Props) {
   }
 
   function handleNext() {
-    // if (cpf === null) {
-    //   return Alert.alert("Digite um CPF válido")
-    // }
-    // if (cpf < 11) {
-    //   return Alert.alert("Digite um CPF completo")
-    // }
+    if (cpf === null) {
+      return Alert.alert("Digite um CPF válido")
+    }
+    if (cpf < 11) {
+      return Alert.alert("Digite um CPF completo")
+    }
     if (cpf) {
     }
-		navigation.navigate("TelRegister")
+		navigation.navigate("PhoneRegister", { user: { cpf } })
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-25 px-4">
+    <View className="flex-1 bg-gray-25 px-4">
       <StatusBar backgroundColor={"#ffffff"} barStyle={"dark-content"} />
       <View className="flex-1 mt-16">
         <View className="gap-3">
@@ -85,6 +85,6 @@ export default function InitialAccessPage({ navigation }: Props) {
         </View>
 
       </View>
-    </SafeAreaView>
+    </View>
   )
 }

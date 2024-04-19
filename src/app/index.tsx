@@ -1,19 +1,6 @@
-import { useState } from "react";
-import { BaseNavigationContainer, NavigationContainer } from "@react-navigation/native";
+import Router from "./routes/router";
 
-import TabRoutes from "./routes/tab.routes";
-import AuthStack from "./routes/authStack";
+export default function App() {
 
-
-function App() {
-
-  const [user, setUser] = useState(false)
-
-  return (
-    <>
-      {user ? <TabRoutes /> : <AuthStack />}
-    </>
-  )
+  return <Router />
 }
-
-export default App;

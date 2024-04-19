@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { router } from "expo-router";
 import { Alert, StatusBar, Text, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -10,18 +9,18 @@ import formatTel from "@/utils/formatTel";
 import { Input } from "@/components/input";
 import ButtonPill from "@/components/buttonPill";
 
-export type Props = NativeStackScreenProps<RootStackParamList, "TelRegister">;
+export type Props = NativeStackScreenProps<RootStackParamList, "PhoneRegister">;
 
-export default function TelRegister({ navigation }: Props ) {
-	const [tel, setTel] = useState<number | null>(null)
+export default function PhoneRegister({ navigation, route }: Props ) {
+	const [phone, setPhone] = useState<number>(0)
 
-	const [isDisabled, setIsDisabled] = useState(false)
+	const [isDisabled, setIsDisabled] = useState(true)
 
 	function handleTelChange(value: string) {
 		value = value.replace(/\D/g, "")
-		setTel(Number(value))
+		setPhone(Number(value))
 
-		if (value.length > 0) {
+		if (value.length === 11) {
 			setIsDisabled(false)
 		} else {
 			setIsDisabled(true)
@@ -29,11 +28,14 @@ export default function TelRegister({ navigation }: Props ) {
 	}
 
 	async function handleNext() {
-		if (!tel) {
+		if (!phone) {
 			Alert.alert("Telefone", "Por favor, insira um número de telefone válido.")
 		}
 		
-		navigation.navigate("CheckCode", { tel })
+		navigation.navigate("CheckCode", { user: {
+			cpf: route.params.user.cpf,
+			phone: phone ? phone : 0,
+		} } )
 	}
 
 	return (
@@ -54,7 +56,7 @@ export default function TelRegister({ navigation }: Props ) {
 						keyboardType="number-pad"
 						onChangeText={value => handleTelChange(value)}
 						maxLength={13}
-						value={formatTel(tel ? tel.toString() : "")}
+						value={formatTel(phone ? phone.toString() : "")}
 					/>
 				</Input>
 			</View>
@@ -68,7 +70,7 @@ export default function TelRegister({ navigation }: Props ) {
 					<ButtonPill
 						theme="secondary"
 						arrowIcon="left"
-						onPress={() => navigation.popToTop()}
+						onPress={() => navigation.goBack()}
 					/>
 					<ButtonPill
 						title="Next"

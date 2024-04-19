@@ -1,9 +1,13 @@
-import { Text } from "react-native"
+import Button from "@/components/button"
+import { useUserStore } from "@/store/user-store"
 
 export default function SettingsScreen() {
+
+	const { signOut } = useUserStore()
+
 	return (
-		<Text className="flex-1 justify-center items-center">
-			Configs
-		</Text>
+		<Button onPress={() => signOut()}>
+			<Button.Text title="SignOut"/>
+		</Button>
 	)
 }

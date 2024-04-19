@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types/reactNavigationTypes";
 
 import InitialAccessPage from "./InitialAccessPage";
-import TelRegister from "./telRegister";
+import TelRegister from "./phoneRegister";
 import CheckCode from "./checkCode";
 import Register from "./register";
 import PrivacyPolicies from "./privacyPolicies";

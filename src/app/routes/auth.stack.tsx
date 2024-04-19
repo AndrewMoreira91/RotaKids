@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types/reactNavigationTypes";
 
 import InitialAccessPage from "@/app/screens/InitialAcessApp/InitialAccessPage";
-import TelRegister from "@/app/screens/InitialAcessApp/telRegister";
+import PhoneRegister from "../screens/InitialAcessApp/phoneRegister";
 import CheckCode from "@/app/screens/InitialAcessApp/checkCode";
 import Register from "@/app/screens/InitialAcessApp/register";
 import PrivacyPolicies from "@/app/screens/InitialAcessApp/privacyPolicies";
@@ -23,8 +23,8 @@ export default function AuthStack() {
         }}
       />
       <Stack.Screen
-        name="TelRegister"
-        component={TelRegister}
+        name="PhoneRegister"
+        component={PhoneRegister}
         options={{
           headerShown: false,
         }}

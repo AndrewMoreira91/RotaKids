@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { StatusBar, Text, View, } from "react-native"; 7
 
-import { router } from "expo-router";
 import { FontAwesome6 } from "@expo/vector-icons"
 import { Checkbox } from "expo-checkbox"
 
@@ -9,16 +8,19 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types/reactNavigationTypes";
 
 import { colors } from "@/styles/colors";
+import { useUserStore } from "@/store/user-store";
 
 import Button from "@/components/button";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PrivacyPolicy">;
 
-function PrivacyPolicies({ navigation }: Props) {
+function PrivacyPolicies({ navigation, route }: Props) {
 
 	const [checked, setChecked] = useState(false);
 
 	const [isDisabled, setIsDisabled] = useState(true);
+
+	const { signIn } = useUserStore()
 
 	function handleChecked() {
 		setChecked(!checked)
@@ -31,7 +33,7 @@ function PrivacyPolicies({ navigation }: Props) {
 
 	function handleNext() {
 		if (checked === true) {
-			navigation.navigate("SendDocuments")
+			signIn(route.params.user)
 		}
 	}
 

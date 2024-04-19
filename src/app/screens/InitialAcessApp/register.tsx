@@ -7,10 +7,11 @@ import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types/reactNavigationTypes";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Register">;
 
-export default function Register({ navigation }: Props) {
+export default function Register({ navigation, route }: Props) {
 
 	const [isDisabled, setIsDisabled] = useState(false)
 
@@ -58,17 +59,23 @@ export default function Register({ navigation }: Props) {
 	}
 
 	function handleNext() {
-		// if (!validateEmail(email)) {
-		// 	return Alert.alert("E-mail inválido")
-		// }
-		// if (!validateNames(firstName)) {
-		// 	return Alert.alert("Nome inválido")
-		// }
-		// if (!validateNames(lastName)) {
-		// 	return Alert.alert("Sobrenome inválido")
-		// }
+		if (!validateEmail(email)) {
+			return Alert.alert("E-mail inválido")
+		}
+		if (!validateNames(firstName)) {
+			return Alert.alert("Nome inválido")
+		}
+		if (!validateNames(lastName)) {
+			return Alert.alert("Sobrenome inválido")
+		}
 
-		navigation.navigate("PrivacyPolicy")
+		navigation.navigate("PrivacyPolicy", { user: {
+			cpf: route.params.user.cpf,
+			phone: route.params.user.phone,
+			firstName,
+			lastName,
+			email
+		}})
 	}
 
 	return (

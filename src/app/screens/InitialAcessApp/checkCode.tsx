@@ -18,8 +18,7 @@ export default function CheckCode({ navigation, route }: Props) {
 	
 	const [isDisabled, setIsDisabled] = useState(false)
 
-	const [tel] = useState(route.params.tel)
-	console.log("tel", tel)
+	const [phone] = useState(route.params.user.phone)
 
 	// function getOtpCode(message: string) {
 	// 	if (message) {
@@ -44,7 +43,10 @@ export default function CheckCode({ navigation, route }: Props) {
 		// 	Alert.alert("Codigo", "Por favor, insira um código válido.")
 		// }
 		
-		navigation.navigate("Register")
+		navigation.navigate("Register", { user: {
+			cpf: route.params.user.cpf,
+			phone: route.params.user.phone
+		}})
 	}
 
 	return (
@@ -53,7 +55,7 @@ export default function CheckCode({ navigation, route }: Props) {
 
 			<View className="mt-10 gap-4">
 				<Text className="font-semibold text-2xl">
-					Coloque o codigo com 4 digitos enviados para {formatTel(tel ? tel.toString() : "")}
+					Coloque o codigo com 4 digitos enviados para {formatTel(phone ? phone.toString() : "")}
 				</Text>
 
 				<View className="flex-row gap-4 w-full">
