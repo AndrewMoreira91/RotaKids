@@ -2,9 +2,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons"
 
 import HomeStack from "./homeStack.routes"
-import Maps from "../screens/tabs/maps"
+import MapScreen from "../screens/tabs/mapScreen"
 import SettingsScreen from "../screens/tabs/settingsScreen"
-
 
 const Tab = createBottomTabNavigator()
 
@@ -27,7 +26,7 @@ export default function TabRoutes() {
 			/>
 			<Tab.Screen
 				name="Maps"
-				component={Maps}
+				component={MapScreen}
 				options={{
 					tabBarIcon: () => <MaterialCommunityIcons name="map" size={30} />,
 					tabBarLabel: "Maps",

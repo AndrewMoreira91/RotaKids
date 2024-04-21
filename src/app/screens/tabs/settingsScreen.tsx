@@ -1,18 +1,23 @@
-import Button from "@/components/button"
 import { useUserStore } from "@/store/user-store"
 import { StatusBar } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+
+import Button from "@/components/button"
+import MainConteiner from "@/components/mainConteiner"
 
 export default function SettingsScreen() {
 
 	const { signOut } = useUserStore()
 
 	return (
-		<SafeAreaView>
-			<StatusBar barStyle={"dark-content"}/>
-			<Button onPress={() => signOut()}>
-				<Button.Text title="SignOut" />
-			</Button>
-		</SafeAreaView>
+		<MainConteiner>
+			<StatusBar barStyle={"dark-content"} />
+
+			<MainConteiner.middle>
+				<Button onPress={() => signOut()}>
+					<Button.Text title="SignOut" />
+				</Button>
+			</MainConteiner.middle>
+			
+		</MainConteiner>
 	)
 }

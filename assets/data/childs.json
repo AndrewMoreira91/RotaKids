@@ -1,0 +1,62 @@
+[
+	{
+		"id": 1,
+		"latitude": -23.455,
+		"longitude": -46.529,
+		"name": "Ana"
+	},
+	{
+		"id": 2,
+		"latitude": -23.429,
+		"longitude": -46.534,
+		"name": "João"
+	},
+	{
+		"id": 3,
+		"latitude": -23.438,
+		"longitude": -46.513,
+		"name": "Maria"
+	},
+	{
+		"id": 4,
+		"latitude": -23.421,
+		"longitude": -46.546,
+		"name": "Pedro"
+	},
+	{
+		"id": 5,
+		"latitude": -23.411,
+		"longitude": -46.525,
+		"name": "Julia"
+	},
+	{
+		"id": 6,
+		"latitude": -23.445,
+		"longitude": -46.535,
+		"name": "Lucas"
+	},
+	{
+		"id": 7,
+		"latitude": -23.415,
+		"longitude": -46.517,
+		"name": "Carolina"
+	},
+	{
+		"id": 8,
+		"latitude": -23.432,
+		"longitude": -46.552,
+		"name": "Gabriel"
+	},
+	{
+		"id": 9,
+		"latitude": -23.421,
+		"longitude": -46.510,
+		"name": "Isabela"
+	},
+	{
+		"id": 10,
+		"latitude": -23.428,
+		"longitude": -46.537,
+		"name": "Matheus"
+	}
+]

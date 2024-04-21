@@ -22,5 +22,9 @@ export default function Layout() {
 		return <Loading />;
 	}
 
-	return <Slot />
+	return <Stack screenOptions={{
+		header(props) {
+			return null;
+		},
+	}} />
 }
