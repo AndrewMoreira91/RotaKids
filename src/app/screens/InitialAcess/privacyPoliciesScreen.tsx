@@ -14,7 +14,7 @@ import Button from "@/components/button";
 
 type Props = NativeStackScreenProps<RootStackParamList, "PrivacyPolicy">;
 
-function PrivacyPolicies({ navigation, route }: Props) {
+export default function PrivacyPoliciesScreen({ navigation, route }: Props) {
 
 	const [checked, setChecked] = useState(false);
 
@@ -74,5 +74,3 @@ function PrivacyPolicies({ navigation, route }: Props) {
 		</View>
 	)
 }
-
-export default PrivacyPolicies;

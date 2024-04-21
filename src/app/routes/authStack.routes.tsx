@@ -1,58 +1,57 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { RootStackParamList } from "@/types/reactNavigationTypes";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
-import InitialAccessPage from "@/app/screens/InitialAcessApp/InitialAccessPage";
-import PhoneRegister from "../screens/InitialAcessApp/phoneRegister";
-import CheckCode from "@/app/screens/InitialAcessApp/checkCode";
-import Register from "@/app/screens/InitialAcessApp/register";
-import PrivacyPolicies from "@/app/screens/InitialAcessApp/privacyPolicies";
-import SendDocuments from "@/app/screens/InitialAcessApp/sendDocuments";
+import InitialAccessScreen from "@/app/screens/InitialAcess/InitialAccessScreen";
+import PhoneRegisterScreen from "../screens/InitialAcess/phoneRegisterScreen";
+import CheckCodeScreen from "@/app/screens/InitialAcess/checkCodeScreen";
+import RegisterScreen from "@/app/screens/InitialAcess/registerScreen";
+import PrivacyPoliciesScreen from "@/app/screens/InitialAcess/privacyPoliciesScreen";
+import SendDocumentsScreen from "@/app/screens/InitialAcess/sendDocumentsScreen";
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 export default function AuthStack() {
 	return (
 		<Stack.Navigator initialRouteName="InitialAcessPage">
       <Stack.Screen
         name="InitialAcessPage"
-        component={InitialAccessPage}
+        component={InitialAccessScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="PhoneRegister"
-        component={PhoneRegister}
+        component={PhoneRegisterScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="CheckCode"
-        component={CheckCode}
+        component={CheckCodeScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="Register"
-        component={Register}
+        component={RegisterScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="PrivacyPolicy"
-        component={PrivacyPolicies}
+        component={PrivacyPoliciesScreen}
         options={{
           headerShown: false,
         }}
       />
       <Stack.Screen
         name="SendDocuments"
-        component={SendDocuments}
+        component={SendDocumentsScreen}
         options={{
           headerShown: false,
         }}

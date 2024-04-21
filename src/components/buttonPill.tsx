@@ -20,13 +20,13 @@ function ButtonPill({ title, arrowIcon, theme = "primary", isDisabled, variant =
 				opacity: isDisabled ? 0.5 : 1,
 				padding: variant === "small" ? 8 : 12,
 			}}
-			activeOpacity={0.8}
+			activeOpacity={0.7}
 			{...rest}
 			disabled={isDisabled}
 		>
 			{title &&
 				<Text
-					className={variant === "small" ? "font-bold" : "font-semibold"}
+					className="font-semibold"
 					style={{
 						color: theme === "primary" ? colors.gray[25] : colors.ink.normal,
 						fontSize: variant === "small" ? 12 : 16,

@@ -1,6 +1,6 @@
 import { StatusBar, Text, View } from "react-native";
 
-function SendDocuments() {
+function SendDocumentsScreen() {
 	return (
 		<View className="flex-1 bg-gray-25 px-4 justify-between my-6">
 			<StatusBar barStyle={"dark-content"} />
@@ -18,4 +18,4 @@ function SendDocuments() {
 	)
 }
 
-export default SendDocuments;
+export default SendDocumentsScreen;
