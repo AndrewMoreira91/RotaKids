@@ -4,7 +4,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Alert, StatusBar, Text, View } from "react-native";
 
-import { RootStackParamList } from "@/types/reactNavigationTypes";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
 import formatTel from "@/utils/formatTel";
 
@@ -12,7 +12,7 @@ import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
 import MainConteiner from "@/components/mainConteiner";
 
-export type Props = NativeStackScreenProps<RootStackParamList, "CheckCode">;
+export type Props = NativeStackScreenProps<AuthStackParamList, "CheckCode">;
 
 export default function CheckCodeScreen({ navigation, route }: Props) {
 

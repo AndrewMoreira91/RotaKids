@@ -6,11 +6,11 @@ import { Alert, StatusBar, Text, View } from "react-native";
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/types/reactNavigationTypes";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
 import { useUserStore } from "@/store/user-store";
 import MainConteiner from "@/components/mainConteiner";
 
-type Props = NativeStackScreenProps<RootStackParamList, "Register">;
+type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
 
 export default function RegisterScreen({ navigation, route }: Props) {
 

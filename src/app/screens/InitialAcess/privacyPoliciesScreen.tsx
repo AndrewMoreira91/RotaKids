@@ -5,14 +5,14 @@ import { FontAwesome6 } from "@expo/vector-icons"
 import { Checkbox } from "expo-checkbox"
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@/types/reactNavigationTypes";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
 import { colors } from "@/styles/colors";
 import { useUserStore } from "@/store/user-store";
 
 import Button from "@/components/button";
 
-type Props = NativeStackScreenProps<RootStackParamList, "PrivacyPolicy">;
+type Props = NativeStackScreenProps<AuthStackParamList, "PrivacyPolicy">;
 
 export default function PrivacyPoliciesScreen({ navigation, route }: Props) {
 

@@ -1,7 +1,7 @@
 import { useUserStore } from "@/store/user-store"
 import { router } from "expo-router"
 import { ScrollView, StatusBar, Text, View } from "react-native"
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { FontAwesome } from "@expo/vector-icons"
 
 import { colors } from "@/styles/colors"
@@ -80,7 +80,10 @@ export default function HomeScreen({ navigation }: Props) {
 							stops={8}
 						/>
 						<View className="my-2" />
-						<ButtonPill variant="default" title="Gerenciar rotas" />
+						<ButtonPill
+							title="Gerenciar rotas"
+							onPress={() => navigation.navigate("ManageRoutes")}
+						/>
 					</View>
 
 					<Text className="font-bold text-ink-normal text-2xl">
@@ -107,7 +110,7 @@ export default function HomeScreen({ navigation }: Props) {
 							title="Responsáveis"
 							description="Gerencia os renponsãveis pelas as crianças que você transporta"
 							onPress={() => navigation.navigate("Guardians")}
-							/>
+						/>
 					</View>
 
 				</View>
