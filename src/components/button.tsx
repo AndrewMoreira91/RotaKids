@@ -13,7 +13,7 @@ function Button({ children, theme = "primary", isDisabled, ...rest }: ButtonProp
 
 	return (
 		<TouchableOpacity
-			className="rounded-lg w-full items-center justify-center p-4 flex-row gap-3"
+			className="rounded-lg w-full items-center justify-center p-4 flex-row gap-3 shadow-xl shadow-black"
 			style={{
 				backgroundColor: theme === "primary" ? colors.blue[900] : colors.gray[200],
 				opacity: isDisabled ? 0.7 : 1,
@@ -32,11 +32,11 @@ type TextButtonProps = {
 	theme?: "primary" | "secondary";
 }
 
-function TextButton({ title, theme="primary", }: TextButtonProps) {
+function TextButton({ title, theme = "primary", }: TextButtonProps) {
 	return (
 		<Text
 			className="font-semibold text-lg"
-			style={{color: theme == "primary" ? colors.gray[25] : colors.ink.normal}}
+			style={{ color: theme == "primary" ? colors.gray[25] : colors.ink.normal }}
 		>
 			{title}
 		</Text>

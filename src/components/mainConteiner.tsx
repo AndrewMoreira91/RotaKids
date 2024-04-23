@@ -6,19 +6,20 @@ import CSS from "csstype"
 
 type Props = {
 	children: React.ReactNode
+	style?: ViewStyle
 }
 
-function MainConteiner({ children }: Props) {
+function MainConteiner({ children, style }: Props) {
 	const insets = useSafeAreaInsets()
 
 	return (
-		<View style={{
+		<View style={[{
 			flex: 1,
 			paddingTop: insets.top,
 			paddingBottom: insets.bottom,
 			backgroundColor: colors.gray[25],
 			paddingHorizontal: 16,
-		}}>
+		}, style]}>
 				{children}
 		</View>
 	)
