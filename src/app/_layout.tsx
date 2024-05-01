@@ -9,13 +9,9 @@ import {
 	NunitoSans_700Bold,
 } from "@expo-google-fonts/nunito-sans"
 
-import { useUserStore } from "@/store/user-store";
-
 import Loading from "@/components/loading";
 
 export default function Layout() {
-
-	const { user } = useUserStore();
 
 	const [fontsLoaded] = useFonts({
 		NunitoSans_400Regular,

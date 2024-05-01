@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import HomeScreen from "../screens/tabs/homeScreen";
-import { ChildsScreen } from "../screens/childsScreen";
+import { ChildsScreen } from "../screens/homeStack/childsScreen";
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
-import { PaymentsScreen } from "../screens/paymentsScreen";
-import { GuardiansScreen } from "../screens/guardiansScreen";
+import { PaymentsScreen } from "../screens/homeStack/paymentsScreen";
+import { GuardiansScreen } from "../screens/homeStack/guardiansScreen";
 import { ManageRoutesScreen } from "../screens/driver/manageRoutesScreen";
 
 const Stack = createNativeStackNavigator<HomeStackParamList>()
