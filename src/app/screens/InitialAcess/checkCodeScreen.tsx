@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // import { startOtpListener, removeListener } from "react-native-otp-verify"
-
 import { Alert, StatusBar, Text, View } from "react-native";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";

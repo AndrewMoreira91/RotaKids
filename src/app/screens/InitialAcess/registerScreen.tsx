@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { router } from "expo-router";
-
 import { Alert, StatusBar, Text, View } from "react-native";
+
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
+import { isEmailValid, isNameValid } from "@/utils/validateInfos";
 
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "@/types/reactNavigationTypes";
-import { useUserStore } from "@/store/user-store";
 import MainConteiner from "@/components/mainConteiner";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
@@ -20,27 +19,6 @@ export default function RegisterScreen({ navigation, route }: Props) {
 	const [firstName, setFirstName] = useState<string>("")
 	const [lastName, setLastName] = useState<string>("")
 
-	function validateNames(name: string) {
-		const re = /^[a-zA-Z]+$/;
-		if (!re.test(name)) {
-			Alert.alert("O campo não pode conter números ou caracteres especiais")
-			return false
-		}
-		if (name.length < 3) {
-			Alert.alert("O campo deve conter no mínimo 3 caracteres")
-			return false
-		}
-		return true
-	}
-
-	function validateEmail(email: string) {
-		const re = /\S+@\S+\.\S+/;
-		if (!re.test(email)) {
-			return false
-		}
-		return true
-	}
-
 	function handleSetFilds(value: string, field: string) {
 		if (field === "email") {
 			setEmail(value.trim())
@@ -52,7 +30,7 @@ export default function RegisterScreen({ navigation, route }: Props) {
 			setLastName(value.trim())
 		}
 
-		if (firstName && lastName && validateEmail(email)) {
+		if (firstName && lastName && isEmailValid(email)) {
 			setIsDisabled(false)
 		} else {
 			setIsDisabled(true)
@@ -60,13 +38,13 @@ export default function RegisterScreen({ navigation, route }: Props) {
 	}
 
 	function handleNext() {
-		if (!validateEmail(email)) {
+		if (!isEmailValid(email)) {
 			return Alert.alert("E-mail inválido")
 		}
-		if (!validateNames(firstName)) {
+		if (!isNameValid(firstName)) {
 			return Alert.alert("Nome inválido")
 		}
-		if (!validateNames(lastName)) {
+		if (!isNameValid(lastName)) {
 			return Alert.alert("Sobrenome inválido")
 		}
 
@@ -96,7 +74,7 @@ export default function RegisterScreen({ navigation, route }: Props) {
 								placeholder="Primeiro nome"
 								onChangeText={value => handleSetFilds(value, "firstName")}
 								value={firstName}
-								onBlur={() => { validateNames(firstName) }}
+								onBlur={() => { isNameValid(firstName) }}
 							/>
 						</Input>
 						<Input variant="outline">
@@ -104,7 +82,7 @@ export default function RegisterScreen({ navigation, route }: Props) {
 								placeholder="Sobrenome"
 								onChangeText={value => handleSetFilds(value, "lastName")}
 								value={lastName}
-								onBlur={() => { validateNames(lastName) }}
+								onBlur={() => { isNameValid(lastName) }}
 							/>
 						</Input>
 					</View>
@@ -119,7 +97,7 @@ export default function RegisterScreen({ navigation, route }: Props) {
 								keyboardType="email-address"
 								onChangeText={value => handleSetFilds(value, "email")}
 								value={email}
-								onBlur={() => { validateEmail(email) }}
+								onBlur={() => { isEmailValid(email) }}
 							/>
 						</Input>
 					</View>

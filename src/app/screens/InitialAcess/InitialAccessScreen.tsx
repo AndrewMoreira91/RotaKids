@@ -1,9 +1,8 @@
 import { useState } from "react"
 import { FontAwesome } from "@expo/vector-icons"
-
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { View, Text, StatusBar, Alert } from "react-native"
 
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { AuthStackParamList } from "@/types/reactNavigationTypes"
 
 import { colors } from "@/styles/colors"
@@ -11,7 +10,6 @@ import formatCPF from "@/utils/formatCPF"
 
 import Button from "@/components/button"
 import { Input } from "@/components/input"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import MainConteiner from "@/components/mainConteiner"
 
 type Props = NativeStackScreenProps<AuthStackParamList, "InitialAcessPage">;
@@ -44,8 +42,6 @@ export default function InitialAccessScreen({ navigation }: Props) {
     }
     navigation.navigate("PhoneRegister", { user: { cpf } })
   }
-
-  const insets = useSafeAreaInsets()
 
   return (
     <MainConteiner>
