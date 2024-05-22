@@ -1,8 +1,10 @@
+import { StatusBar, Text, View } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import { HomeStackParamList } from "@/types/reactNavigationTypes";
+
 import ButtonPill from "@/components/buttonPill";
 import MainConteiner from "@/components/mainConteiner";
-import { HomeStackParamList } from "@/types/reactNavigationTypes";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StatusBar, Text, View } from "react-native";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Payments">;
 

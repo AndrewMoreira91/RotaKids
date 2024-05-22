@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StatusBar, Text, View, } from "react-native"; 7
+import { StatusBar, Text, View, } from "react-native";
 
 import { FontAwesome6 } from "@expo/vector-icons"
 import { Checkbox } from "expo-checkbox"

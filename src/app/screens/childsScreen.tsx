@@ -1,8 +1,10 @@
-import ButtonPill from "@/components/buttonPill";
-import MainConteiner from "@/components/mainConteiner";
-import { HomeStackParamList } from "@/types/reactNavigationTypes";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StatusBar, Text, View } from "react-native";
+
+import { HomeStackParamList } from "@/types/reactNavigationTypes";
+
+import MainConteiner from "@/components/mainConteiner";
+import ButtonPill from "@/components/buttonPill";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Childs">;
 

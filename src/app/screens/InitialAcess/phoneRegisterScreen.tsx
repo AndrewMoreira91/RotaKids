@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Alert, StatusBar, Text, View } from "react-native";
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -41,8 +40,6 @@ export default function PhoneRegisterScreen({ navigation, route }: Props) {
 			}
 		})
 	}
-
-	const insets = useSafeAreaInsets()
 
 	return (
 		<MainConteiner>

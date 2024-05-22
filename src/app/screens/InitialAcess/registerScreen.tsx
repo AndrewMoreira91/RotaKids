@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { router } from "expo-router";
-
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, StatusBar, Text, View } from "react-native";
+
+import { validateEmail, validateNames } from "@/utils/validateInfos";
+import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { AuthStackParamList } from "@/types/reactNavigationTypes";
-import { useUserStore } from "@/store/user-store";
 import MainConteiner from "@/components/mainConteiner";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "Register">;
@@ -19,27 +18,6 @@ export default function RegisterScreen({ navigation, route }: Props) {
 	const [email, setEmail] = useState<string>("")
 	const [firstName, setFirstName] = useState<string>("")
 	const [lastName, setLastName] = useState<string>("")
-
-	function validateNames(name: string) {
-		const re = /^[a-zA-Z]+$/;
-		if (!re.test(name)) {
-			Alert.alert("O campo não pode conter números ou caracteres especiais")
-			return false
-		}
-		if (name.length < 3) {
-			Alert.alert("O campo deve conter no mínimo 3 caracteres")
-			return false
-		}
-		return true
-	}
-
-	function validateEmail(email: string) {
-		const re = /\S+@\S+\.\S+/;
-		if (!re.test(email)) {
-			return false
-		}
-		return true
-	}
 
 	function handleSetFilds(value: string, field: string) {
 		if (field === "email") {
