@@ -37,4 +37,4 @@ export const useUserStore = create(
 	}), {
 		name: "rota-kids: user-store",
 		storage: createJSONStorage(() => AsyncStorage)
-	}));
+	}))
