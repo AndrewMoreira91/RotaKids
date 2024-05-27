@@ -1,4 +1,4 @@
-import { UserProps } from "@/store/user-store";
+import { UserProps } from "./userType";
 
 export type AuthStackParamList = {
   InitialAcessPage: undefined;

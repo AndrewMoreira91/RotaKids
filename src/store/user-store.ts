@@ -2,15 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import uuid from 'react-native-uuid';
-
-export type UserProps = {
-	id?: number[] | string;
-	firstName: string;
-	lastName: string;
-	email: string;
-	phone: number;
-	cpf: number;
-}
+import { UserProps } from "@/types/userType";
 
 type UseStoreProps = {
 	user: UserProps | null;

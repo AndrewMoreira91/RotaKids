@@ -1,8 +1,6 @@
 import { colors } from "@/styles/colors"
-import { FlexStyle, StyleProp, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-
-import CSS from "csstype"
 
 type Props = {
 	children: React.ReactNode
@@ -19,6 +17,7 @@ function MainConteiner({ children, style }: Props) {
 			paddingBottom: insets.bottom,
 			backgroundColor: colors.gray[25],
 			paddingHorizontal: 16,
+			marginTop: 16,
 		}, style]}>
 				{children}
 		</View>
