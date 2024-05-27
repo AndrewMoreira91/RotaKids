@@ -11,11 +11,14 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(cuid())
-  email    String @unique
-  name     String
-  password String
-  tasks    Task[]
+  id        String  @id @default(cuid())
+  cpf       String  @unique
+  email     String  @unique
+  phone     Int     @unique
+  firstName String
+  lastName  String
+  password  String?
+  tasks     Task[]
 }
 
 model Task {
