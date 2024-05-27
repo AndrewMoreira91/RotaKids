@@ -3,9 +3,11 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-	const user = await prisma.user.findMany({
-		include: {
-			tasks: true
+	const user = await prisma.user.create({
+		data: {
+			name: 'Andrew',
+			email: 'andrew@gmail.com',
+			password: '3432354'
 		}
 	})
 	console.dir(user, { depth: null })
