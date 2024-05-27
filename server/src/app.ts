@@ -12,9 +12,28 @@ app.get('/', (req, res) => {
 
 app.post('/users', async (req, res) => {
 	try {
-		const { name, email, password }: UserProps = req.body
-		const user = await userController.createUser({ name, email, password })
+		const user = await userController.createUser(req.body)
 		res.status(201).json(user)
+	} catch (error) {
+		res.status(400).json({error, message: "Erro interno do servidor"})
+	}
+})
+
+
+app.get('/users', async (req, res) => {
+	try {
+		const users = await userController.getUsers()
+		res.status(200).json(users)
+	} catch (error) {
+		res.status(400).json({error, message: "Erro interno do servidor"})
+	}
+})
+
+app.get('/users/search', async (req, res) => {
+	try {
+		const { email } = req.query as { email: string }
+		const users = await userController.getUserByParams({ email })
+		res.status(200).json(users)
 	} catch (error) {
 		res.status(400).json({error, message: "Erro interno do servidor"})
 	}
@@ -25,15 +44,6 @@ app.get('/users/:id', async (req, res) => {
 		const { id } = req.params
 		const user = await userController.getUserById(id)
 		res.status(200).json(user)
-	} catch (error) {
-		res.status(400).json({error, message: "Erro interno do servidor"})
-	}
-})
-
-app.get('/users', async (req, res) => {
-	try {
-		const users = await userController.getUsers()
-		res.status(200).json(users)
 	} catch (error) {
 		res.status(400).json({error, message: "Erro interno do servidor"})
 	}
