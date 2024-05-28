@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, StatusBar, Text, View } from "react-native";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
 import formatTel from "@/utils/formatTel";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { Input } from "@/components/input";
 import ButtonPill from "@/components/buttonPill";

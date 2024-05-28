@@ -7,12 +7,14 @@ import AuthStack from "./authStack.routes";
 
 export default function Router() {
 
-  const userStore = useUserStore()
-  console.log(userStore.user)
+  const { user } = useUserStore()
+
+  console.log(user)
   
   return (
     <NavigationContainer independent={true}>
-      {userStore.user ? <TabRoutes /> : <AuthStack />}
+      {user ? <TabRoutes /> : <AuthStack />}
     </NavigationContainer>
   )
+  
 }

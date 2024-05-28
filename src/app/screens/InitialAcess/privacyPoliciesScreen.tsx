@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { StatusBar, Text, View, } from "react-native";
+
 import { FontAwesome6 } from "@expo/vector-icons"
 import { Checkbox } from "expo-checkbox"
-import { StatusBar, Text, View, } from "react-native"; 7
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 import { colors } from "@/styles/colors";
 import { useUserStore } from "@/store/user-store";

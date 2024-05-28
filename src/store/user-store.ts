@@ -6,14 +6,14 @@ import { UserProps } from "@/types/userType";
 
 type UseStoreProps = {
 	user: UserProps | null;
-	signIn: ({ }: UserProps) => void;
+	signIn: ({}: UserProps) => void;
 	signOut: () => void;
 };
 
 export const useUserStore = create(
 	persist<UseStoreProps>(set => ({
 		user: null,
-
+		
 		signIn: ({ firstName, lastName, email, phone, cpf }: UserProps) => set({
 			user: {
 				id: uuid.v4(),
@@ -26,9 +26,7 @@ export const useUserStore = create(
 		}),
 
 		signOut: () => set({ user: null }),
-		
-	}),{
-			name: "rota-kids: user-store",
-			storage: createJSONStorage(() => AsyncStorage)
-		}
-	));
+	}), {
+		name: "rota-kids: user-store",
+		storage: createJSONStorage(() => AsyncStorage)
+	}))
