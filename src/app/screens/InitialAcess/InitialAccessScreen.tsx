@@ -6,25 +6,24 @@ import { View, Text, StatusBar, Alert } from "react-native"
 import { AuthStackParamList } from "@/types/reactNavigationTypes"
 
 import { colors } from "@/styles/colors"
-import formatCPF from "@/utils/formatCPF"
 
 import Button from "@/components/button"
 import { Input } from "@/components/input"
 import MainConteiner from "@/components/mainConteiner"
+import { formatCPF, isCPFValidFormat } from "@/utils/formatCPF"
 
 type Props = NativeStackScreenProps<AuthStackParamList, "InitialAcessPage">;
 
 export default function InitialAccessScreen({ navigation }: Props) {
 
-  const [cpf, setCpf] = useState<number | null>(null)
+  const [cpf, setCpf] = useState<string | null>(null)
 
   const [isDisabled, setIsDisabled] = useState(true)
 
   function handleCpfChange(value: string) {
-    value = value.replace(/\D/g, "")
-    setCpf(Number(value))
+    setCpf(value)
 
-    if (value.length === 11) {
+    if (value.length === 14) {
       setIsDisabled(false)
     } else {
       setIsDisabled(true)
@@ -32,15 +31,15 @@ export default function InitialAccessScreen({ navigation }: Props) {
   }
 
   function handleNext() {
-    if (cpf === null) {
+    if (cpf === null || !isCPFValidFormat(cpf)) {
       return Alert.alert("Digite um CPF válido")
     }
-    if (cpf < 11) {
+    if (cpf.length < 11) {
       return Alert.alert("Digite um CPF completo")
     }
     if (cpf) {
+      navigation.navigate("PhoneRegister", { user: { cpf } })
     }
-    navigation.navigate("PhoneRegister", { user: { cpf } })
   }
 
   return (
@@ -58,7 +57,7 @@ export default function InitialAccessScreen({ navigation }: Props) {
             keyboardType="number-pad"
             onChangeText={value => handleCpfChange(value)}
             maxLength={14}
-            value={formatCPF(cpf ? cpf.toString() : "")}
+            value={formatCPF(cpf ? cpf : "")}
           />
         </Input>
 

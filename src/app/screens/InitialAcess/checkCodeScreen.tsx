@@ -5,7 +5,7 @@ import { Alert, StatusBar, Text, View } from "react-native";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
-import formatTel from "@/utils/formatTel";
+import { formatTel } from "@/utils/formatTel";
 
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
