@@ -1,6 +1,6 @@
 import express from 'express'
 import { userController } from './controllers/user.controller';
-import { UserProps } from './types/user.type';
+import { Prisma } from '@prisma/client';
 
 const app = express()
 
@@ -29,10 +29,26 @@ app.get('/users', async (req, res) => {
 	}
 })
 
+export type QueryParams = {
+	cpf?: string,
+	email?: string,
+	firstName?: string,
+	phone?: string
+}
+
 app.get('/users/search', async (req, res) => {
 	try {
-		const { email } = req.query as { email: string }
-		const users = await userController.getUserByParams({ email })
+		let query = {} as Prisma.UserWhereUniqueInput
+		const { cpf, email, firstName, phone } = req.query as QueryParams
+
+		if (cpf) query.cpf = cpf
+		if (email) query.email = email
+		if (firstName) query.firstName = firstName
+		if (phone) query.phone = phone
+
+		console.log(query)
+
+		const users = await userController.getUserByParams(query)
 		res.status(200).json(users)
 	} catch (error) {
 		res.status(400).json({error, message: "Erro interno do servidor"})

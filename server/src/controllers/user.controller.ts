@@ -1,6 +1,8 @@
 import { UUID } from "crypto"
 import prisma from "../lib/prima"
 import { UserProps } from "../types/user.type"
+import { QueryParams } from "../app"
+import { Prisma } from "@prisma/client"
 
 async function createUser(data: UserProps) {
 	const user = await prisma.user.create({
@@ -18,7 +20,7 @@ async function getUsers() {
 			email: true,
 			phone: true,
 			password: false,
-			cpf: false,
+			cpf: true,
 		}
 	})
 	return users
@@ -97,12 +99,10 @@ async function deleteUser(id: string) {
 	}
 }
 
-async function getUserByParams(params: { email: string }) {
+async function getUserByParams(params: Prisma.UserWhereUniqueInput) {
 	try {
 		const user = await prisma.user.findUnique({
-			where: {
-				email: params.email,
-			},
+			where: params,
 			select: {
 				id: true,
 				firstName: true,
