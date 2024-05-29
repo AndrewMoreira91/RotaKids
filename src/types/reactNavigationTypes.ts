@@ -3,7 +3,7 @@ import { UserProps } from "./userType";
 export type AuthStackParamList = {
   InitialAcessPage: undefined;
 	PhoneRegister: { user: { cpf: string } };
-  CheckCode: { user: { cpf: string, phone: string } };
+  CheckCode: { user: { cpf: string, phone: string } | UserProps };
   Register: { user: { cpf: string, phone: string } };
   PrivacyPolicy:{ user: UserProps } ;
   SendDocuments: undefined;

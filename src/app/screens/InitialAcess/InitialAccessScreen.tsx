@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FontAwesome } from "@expo/vector-icons"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { View, Text, StatusBar, Alert } from "react-native"
@@ -7,10 +7,13 @@ import { AuthStackParamList } from "@/types/reactNavigationTypes"
 
 import { colors } from "@/styles/colors"
 
+import axios from "axios"
+
 import Button from "@/components/button"
 import { Input } from "@/components/input"
 import MainConteiner from "@/components/mainConteiner"
 import { formatCPF, isCPFValidFormat } from "@/utils/formatCPF"
+import api from "@/lib/axios"
 
 type Props = NativeStackScreenProps<AuthStackParamList, "InitialAcessPage">;
 
@@ -19,6 +22,8 @@ export default function InitialAccessScreen({ navigation }: Props) {
   const [cpf, setCpf] = useState<string | null>(null)
 
   const [isDisabled, setIsDisabled] = useState(true)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   function handleCpfChange(value: string) {
     setCpf(value)
@@ -30,7 +35,7 @@ export default function InitialAccessScreen({ navigation }: Props) {
     }
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (cpf === null || !isCPFValidFormat(cpf)) {
       return Alert.alert("Digite um CPF válido")
     }
@@ -38,7 +43,14 @@ export default function InitialAccessScreen({ navigation }: Props) {
       return Alert.alert("Digite um CPF completo")
     }
     if (cpf) {
-      navigation.navigate("PhoneRegister", { user: { cpf } })
+      setIsLoading(true)
+      const response = await api.get(`/users/search?cpf=${cpf}`)
+        .finally(() => setIsLoading(false))
+      if(response.data !== null) {
+        navigation.navigate("CheckCode", { user: response.data })
+      } else {
+        navigation.navigate("PhoneRegister", { user: { cpf } })
+      }
     }
   }
 
@@ -61,7 +73,7 @@ export default function InitialAccessScreen({ navigation }: Props) {
           />
         </Input>
 
-        <Button onPress={handleNext} isDisabled={isDisabled}>
+        <Button onPress={handleNext} isDisabled={isDisabled} isLoading={isLoading}>
           <Button.Text title="Continue" />
         </Button>
       </View>

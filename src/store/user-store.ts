@@ -1,7 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import uuid from 'react-native-uuid';
 import { UserProps } from "@/types/userType";
 
 type UseStoreProps = {
@@ -14,9 +13,9 @@ export const useUserStore = create(
 	persist<UseStoreProps>(set => ({
 		user: null,
 		
-		signIn: ({ firstName, lastName, email, phone, cpf }: UserProps) => set({
+		signIn: ({id, firstName, lastName, email, phone, cpf }: UserProps) => set({
 			user: {
-				id: uuid.v4(),
+				id,
 				firstName,
 				lastName,
 				email,

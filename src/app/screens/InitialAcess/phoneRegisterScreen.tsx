@@ -27,8 +27,6 @@ export default function PhoneRegisterScreen({ navigation, route }: Props) {
 		}
 	}
 
-	console.log(phone)
-
 	async function handleNext() {
 		if (phone === null || !isTelValidFormat(phone)) {
 			Alert.alert("Telefone", "Por favor, insira um número de telefone válido.")
@@ -36,7 +34,7 @@ export default function PhoneRegisterScreen({ navigation, route }: Props) {
 			navigation.navigate("CheckCode", {
 				user: {
 					cpf: route.params.user.cpf,
-					phone,
+					phone
 				}
 			})
 		}

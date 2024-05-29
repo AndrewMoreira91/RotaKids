@@ -1,15 +1,16 @@
 import { colors } from "@/styles/colors";
 import { ReactNode } from "react";
 
-import { TouchableOpacity, Text, TouchableOpacityProps } from "react-native";
+import { TouchableOpacity, Text, TouchableOpacityProps, ActivityIndicator } from "react-native";
 
 type ButtonProps = TouchableOpacityProps & {
 	children: ReactNode;
 	theme?: "primary" | "secondary";
 	isDisabled?: boolean;
+	isLoading?: boolean;
 }
 
-function Button({ children, theme = "primary", isDisabled, ...rest }: ButtonProps) {
+function Button({ children, theme = "primary", isDisabled, isLoading, ...rest }: ButtonProps) {
 
 	return (
 		<TouchableOpacity
@@ -22,7 +23,11 @@ function Button({ children, theme = "primary", isDisabled, ...rest }: ButtonProp
 			{...rest}
 			disabled={isDisabled}
 		>
-			{children}
+			{isLoading ? (
+				<ActivityIndicator color={colors.gray[25]} />
+			) : (
+				children
+			)}
 		</TouchableOpacity>
 	)
 }
@@ -32,7 +37,7 @@ type TextButtonProps = {
 	theme?: "primary" | "secondary";
 }
 
-function TextButton({ title, theme = "primary", }: TextButtonProps) {
+function TextButton({ title, theme = "primary" }: TextButtonProps) {
 	return (
 		<Text
 			className="font-semibold text-lg"

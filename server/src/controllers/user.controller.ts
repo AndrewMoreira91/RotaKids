@@ -6,7 +6,16 @@ import { Prisma } from "@prisma/client"
 
 async function createUser(data: UserProps) {
 	const user = await prisma.user.create({
-		data
+		data,
+		select: {
+			id: true,
+			firstName: true,
+			lastName: true,
+			email: true,
+			phone: true,
+			password: false,
+			cpf: true,
+		}
 	})
 	return user
 }
@@ -110,13 +119,13 @@ async function getUserByParams(params: Prisma.UserWhereUniqueInput) {
 				email: true,
 				phone: true,
 				password: false,
-				cpf: false,
+				cpf: true,
 			}
 		})
 		if (user !== null) {
 			return user
 		} else {
-			return "Usuario não encontrado"
+			return null
 		}
 	} catch (error) {
 		return "Erro ao buscar usuário"

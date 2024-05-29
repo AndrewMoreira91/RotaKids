@@ -1,5 +1,5 @@
 export type UserProps = {
-	id?: number[] | string;
+	id: string;
 	firstName: string;
 	lastName: string;
 	email: string;

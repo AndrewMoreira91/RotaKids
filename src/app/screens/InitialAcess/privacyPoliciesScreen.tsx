@@ -11,6 +11,7 @@ import { colors } from "@/styles/colors";
 import { useUserStore } from "@/store/user-store";
 
 import Button from "@/components/button";
+import api from "@/lib/axios";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "PrivacyPolicy">;
 
@@ -19,6 +20,7 @@ export default function PrivacyPoliciesScreen({ navigation, route }: Props) {
 	const [checked, setChecked] = useState(false);
 
 	const [isDisabled, setIsDisabled] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const { signIn } = useUserStore()
 
@@ -31,9 +33,14 @@ export default function PrivacyPoliciesScreen({ navigation, route }: Props) {
 		}
 	}
 
-	function handleNext() {
+	async function handleNext() {
 		if (checked === true) {
-			signIn(route.params.user)
+			setIsLoading(true)
+			const response = await api.post("/users", route.params.user)
+				.finally(() => setIsLoading(false))
+			if (response.data) {
+				signIn(response.data)
+			}
 		}
 	}
 

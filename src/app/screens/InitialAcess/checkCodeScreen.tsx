@@ -10,6 +10,8 @@ import { formatTel } from "@/utils/formatTel";
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
 import MainConteiner from "@/components/mainConteiner";
+import { UserProps } from "@/types/userType";
+import { useUserStore } from "@/store/user-store";
 
 export type Props = NativeStackScreenProps<AuthStackParamList, "CheckCode">;
 
@@ -20,6 +22,8 @@ export default function CheckCodeScreen({ navigation, route }: Props) {
 	const [isDisabled, setIsDisabled] = useState(false)
 
 	const [phone] = useState(route.params.user.phone)
+
+	const { signIn } = useUserStore()
 
 	// function getOtpCode(message: string) {
 	// 	if (message) {
@@ -44,12 +48,16 @@ export default function CheckCodeScreen({ navigation, route }: Props) {
 		// 	Alert.alert("Codigo", "Por favor, insira um código válido.")
 		// }
 
-		navigation.navigate("Register", {
-			user: {
-				cpf: route.params.user.cpf,
-				phone: route.params.user.phone
-			}
-		})
+		if ("email" in route.params.user) {
+			signIn(route.params.user)
+		} else {
+			navigation.navigate("Register", {
+				user: {
+					cpf: route.params.user.cpf,
+					phone,
+				},
+			});
+		}
 	}
 
 	return (
