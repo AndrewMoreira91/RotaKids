@@ -7,8 +7,6 @@ import { AuthStackParamList } from "@/types/reactNavigationTypes"
 
 import { colors } from "@/styles/colors"
 
-import axios from "axios"
-
 import Button from "@/components/button"
 import { Input } from "@/components/input"
 import MainConteiner from "@/components/mainConteiner"
@@ -44,13 +42,17 @@ export default function InitialAccessScreen({ navigation }: Props) {
     }
     if (cpf) {
       setIsLoading(true)
-      const response = await api.get(`/users/search?cpf=${cpf}`)
+      await api.get(`/users/search?cpf=${cpf}`)
+        .then((res) => {
+          console.log(res.data)
+          if (res.data !== null) {
+            navigation.navigate("CheckCode", { user: res.data })
+          } else {
+            navigation.navigate("PhoneRegister", { user: { cpf } })
+          }
+        })
+        .catch(() => Alert.alert("Erro de conecção com o servidor, tente novamente mais tarde	"))
         .finally(() => setIsLoading(false))
-      if(response.data !== null) {
-        navigation.navigate("CheckCode", { user: response.data })
-      } else {
-        navigation.navigate("PhoneRegister", { user: { cpf } })
-      }
     }
   }
 
