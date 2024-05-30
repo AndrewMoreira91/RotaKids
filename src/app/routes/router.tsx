@@ -9,7 +9,7 @@ export default function Router() {
 
   const { user } = useUserStore()
 
-  console.log(user)
+  // console.log(user)
   
   return (
     <NavigationContainer independent={true}>

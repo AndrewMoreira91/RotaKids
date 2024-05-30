@@ -3,7 +3,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Alert, StatusBar, Text, View } from "react-native";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
-import { formatTel, isTelValidFormat } from "@/utils/formatTel";
+import { isTelValidFormat } from "@/utils/validations";
+import { formatTel } from "@/utils/formatToTexts";
 
 import { Input } from "@/components/input";
 import ButtonPill from "@/components/buttonPill";

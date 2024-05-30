@@ -6,11 +6,12 @@ import { View, Text, StatusBar, Alert } from "react-native"
 import { AuthStackParamList } from "@/types/reactNavigationTypes"
 
 import { colors } from "@/styles/colors"
+import { isCPFValidFormat } from "@/utils/validations"
+import { formatCPF } from "@/utils/formatToTexts"
 
 import Button from "@/components/button"
 import { Input } from "@/components/input"
 import MainConteiner from "@/components/mainConteiner"
-import { formatCPF, isCPFValidFormat } from "@/utils/formatCPF"
 import api from "@/lib/axios"
 
 type Props = NativeStackScreenProps<AuthStackParamList, "InitialAcessPage">;
@@ -44,7 +45,6 @@ export default function InitialAccessScreen({ navigation }: Props) {
       setIsLoading(true)
       await api.get(`/users/search?cpf=${cpf}`)
         .then((res) => {
-          console.log(res.data)
           if (res.data !== null) {
             navigation.navigate("CheckCode", { user: res.data })
           } else {

@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // import { startOtpListener, removeListener } from "react-native-otp-verify"
 import { Alert, StatusBar, Text, View } from "react-native";
+import { formatTel } from "@/utils/formatToTexts";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
-
-import { formatTel } from "@/utils/formatTel";
 
 import ButtonPill from "@/components/buttonPill";
 import { Input } from "@/components/input";
 import MainConteiner from "@/components/mainConteiner";
-import { UserProps } from "@/types/userType";
 import { useUserStore } from "@/store/user-store";
 
 export type Props = NativeStackScreenProps<AuthStackParamList, "CheckCode">;

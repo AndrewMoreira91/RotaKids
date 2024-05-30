@@ -6,12 +6,13 @@ import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
 type ButtonPillProps = TouchableOpacityProps & {
 	title?: string;
 	arrowIcon?: "left" | "right";
+	iconPosition?: "left" | "right"
 	theme?: "primary" | "secondary";
 	variant?: "default" | "small",
 	isDisabled?: boolean;
 }
 
-function ButtonPill({ title, arrowIcon, theme = "primary", isDisabled, variant = "default", ...rest }: ButtonPillProps) {
+function ButtonPill({ title, arrowIcon, iconPosition="left", theme = "primary", isDisabled, variant = "default", ...rest }: ButtonPillProps) {
 	return (
 		<TouchableOpacity
 			className="self-start rounded-full flex-row items-center justify-center gap-1"
@@ -24,6 +25,16 @@ function ButtonPill({ title, arrowIcon, theme = "primary", isDisabled, variant =
 			{...rest}
 			disabled={isDisabled}
 		>
+			{
+				iconPosition === "left" ?
+					arrowIcon && <MaterialCommunityIcons
+						name={`arrow-${arrowIcon}`}
+						size={20}
+						color={theme === "primary" ? colors.gray[25] : colors.ink.normal}
+					/> :
+					null
+			}
+
 			{title &&
 				<Text
 					className="font-semibold"
@@ -35,11 +46,15 @@ function ButtonPill({ title, arrowIcon, theme = "primary", isDisabled, variant =
 					{title}
 				</Text>}
 
-			{arrowIcon && <MaterialCommunityIcons
-				name={`arrow-${arrowIcon}`}
-				size={20}
-				color={theme === "primary" ? colors.gray[25] : colors.ink.normal}
-			/>}
+			{
+				iconPosition === "right" ?
+					arrowIcon && <MaterialCommunityIcons
+						name={`arrow-${arrowIcon}`}
+						size={20}
+						color={theme === "primary" ? colors.gray[25] : colors.ink.normal}
+					/> :
+					null
+			}
 		</TouchableOpacity>
 	);
 }
