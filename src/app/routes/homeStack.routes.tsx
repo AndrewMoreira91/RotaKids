@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/tabs/homeScreen";
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
 import { PaymentsScreen } from "../screens/paymentsScreen";
-import { GuardiansScreen } from "../screens/guardiansScreen";
+import { GuardiansScreen } from "../screens/guardianScreen/guardiansScreen";
 import { ManageRoutesScreen } from "../screens/driver/manageRoutesScreen";
 import { ChildsScreen } from "../screens/childsScreens/childsScreen";
 import { RegisterChildsScreen } from "../screens/childsScreens/registerChildScreen";
