@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // import { startOtpListener, removeListener } from "react-native-otp-verify"
 import { Alert, StatusBar, Text, View } from "react-native";
-import { formatTel } from "@/utils/formatToTexts";
+import { formatPhone } from "@/utils/formatToTexts";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
 
@@ -65,7 +65,7 @@ export default function CheckCodeScreen({ navigation, route }: Props) {
 			<MainConteiner.middle>
 				<View className="gap-4">
 					<Text className="font-semibold text-2xl">
-						Coloque o codigo com 4 digitos enviados para {formatTel(phone ? phone.toString() : "")}
+						Coloque o codigo com 4 digitos enviados para {formatPhone(phone ? phone.toString() : "")}
 					</Text>
 
 					<View className="flex-row gap-4 w-full">

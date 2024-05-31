@@ -4,7 +4,7 @@ import { Alert, StatusBar, Text, View } from "react-native";
 
 import { AuthStackParamList } from "@/types/reactNavigationTypes";
 import { isTelValidFormat } from "@/utils/validations";
-import { formatTel } from "@/utils/formatToTexts";
+import { formatPhone } from "@/utils/formatToTexts";
 
 import { Input } from "@/components/input";
 import ButtonPill from "@/components/buttonPill";
@@ -60,7 +60,7 @@ export default function PhoneRegisterScreen({ navigation, route }: Props) {
 							keyboardType="number-pad"
 							onChangeText={value => handleTelChange(value)}
 							maxLength={13}
-							value={formatTel(phone ? phone : "")}
+							value={formatPhone(phone ? phone : "")}
 						/>
 					</Input>
 				</View>

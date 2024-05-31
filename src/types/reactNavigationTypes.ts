@@ -12,7 +12,8 @@ export type AuthStackParamList = {
 export type HomeStackParamList = {
   Home: undefined;
   Childs: undefined;
-  RegisterChild: undefined;
+  ChildRegister: undefined;
+  GuardiansRegister: undefined;
   Payments: undefined;
   Guardians: undefined;
   ManageRoutes: undefined;

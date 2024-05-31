@@ -1,34 +1,43 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StatusBar, Text, View } from "react-native";
+import { FlatList, StatusBar, Text, View } from "react-native";
 
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
 
-import ButtonPill from "@/components/buttonPill";
 import MainConteiner from "@/components/mainConteiner";
+import Button from "@/components/button";
+import Header from "@/components/header";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Guardians">;
 
 export function GuardiansScreen({ navigation }: Props) {
-	return (
-		<MainConteiner>
-			<StatusBar barStyle={"dark-content"} />
-			<MainConteiner.middle>
-				<Text className="text-5xl">
-					GuardiansScreen
-				</Text>
 
-				<View className="w-full flex-row justify-between">
-					<ButtonPill
-						theme="secondary"
-						arrowIcon="left"
-						onPress={() => navigation.goBack()}
+	const guardians = [
+		{
+			name: "João"
+		},
+		{
+			name: "Maria"
+		}
+	]
+
+	return (
+		<>
+			<Header title="Responsáveis" navigation={navigation} />
+			<MainConteiner style={{ marginTop: 0 }}>
+				<StatusBar barStyle={"dark-content"} />
+				<View className="gap-4">
+
+					<Button onPress={() => navigation.navigate("GuardiansRegister")}>
+						<Button.Text title="Adicionar um novo responsável" />
+					</Button>
+
+					<FlatList
+						data={guardians}
+						renderItem={({ item }) => <Text>{item.name}</Text>}
 					/>
-					<ButtonPill
-						title="Next"
-						arrowIcon="right"
-					/>
+
 				</View>
-			</MainConteiner.middle>
-		</MainConteiner>
+			</MainConteiner>
+		</>
 	)
 }

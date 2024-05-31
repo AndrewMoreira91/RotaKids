@@ -6,7 +6,9 @@ import { PaymentsScreen } from "../screens/paymentsScreen";
 import { GuardiansScreen } from "../screens/guardianScreen/guardiansScreen";
 import { ManageRoutesScreen } from "../screens/driver/manageRoutesScreen";
 import { ChildsScreen } from "../screens/childsScreens/childsScreen";
-import { RegisterChildsScreen } from "../screens/childsScreens/registerChildScreen";
+import { ChildsRegisterScreen } from "../screens/childsScreens/childsRegisterScreen";
+import { GuardianRegisterScreen } from "../screens/guardianScreen/guardiansRegisterScreen";
+import Header from "@/components/header";
 
 const Stack = createNativeStackNavigator<HomeStackParamList>()
 
@@ -15,20 +17,23 @@ export default function HomeStack() {
 		<Stack.Navigator
 			initialRouteName="Home"
 			screenOptions={{
-				headerShown: false
+				header: () => null
 			}}
 		>
 			<Stack.Screen
 				name="Home"
 				component={HomeScreen}
+				options={{
+					headerShown: false
+				}}
 			/>
 			<Stack.Screen
 				name="Childs"
 				component={ChildsScreen}
 			/>
 			<Stack.Screen 
-				name="RegisterChild"
-				component={RegisterChildsScreen}
+				name="ChildRegister"
+				component={ChildsRegisterScreen}
 			/>
 			<Stack.Screen
 				name="Payments"
@@ -37,6 +42,10 @@ export default function HomeStack() {
 			<Stack.Screen
 				name="Guardians"
 				component={GuardiansScreen}
+			/>
+			<Stack.Screen
+				name="GuardiansRegister"
+				component={GuardianRegisterScreen}
 			/>
 			<Stack.Screen
 				name="ManageRoutes"

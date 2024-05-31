@@ -6,6 +6,7 @@ import { HomeStackParamList } from "@/types/reactNavigationTypes";
 import MainConteiner from "@/components/mainConteiner";
 import ButtonPill from "@/components/buttonPill";
 import Button from "@/components/button";
+import Header from "@/components/header";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Childs">;
 
@@ -21,28 +22,23 @@ export function ChildsScreen({ navigation }: Props) {
 	]
 
 	return (
-		<MainConteiner>
-			<StatusBar barStyle={"dark-content"} />
-			<View className="gap-4">
+		<>
+			<Header title="Crianças" navigation={navigation} />
+			<MainConteiner style={{marginTop: 0}}>
+				<StatusBar barStyle={"dark-content"} />
+				<View className="gap-4">
 
-				<ButtonPill
-					theme="secondary"
-					arrowIcon="left"
-					iconPosition="left"
-					title="Voltar"
-					onPress={() => navigation.goBack()}
-				/>
+					<Button onPress={() => navigation.navigate("ChildRegister")}>
+						<Button.Text title="Adicionar uma criança" />
+					</Button>
 
-				<Button onPress={() => navigation.navigate("RegisterChild")}>
-					<Button.Text title="Adicionar uma criança" />
-				</Button>
+					<FlatList
+						data={childs}
+						renderItem={({ item }) => <Text>{item.name}</Text>}
+					/>
 
-				<FlatList
-					data={childs}
-					renderItem={({item}) => <Text>{item.name}</Text>}
-				/>
-
-			</View>
-		</MainConteiner>
+				</View>
+			</MainConteiner>
+		</>
 	)
 }
