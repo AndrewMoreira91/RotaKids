@@ -15,24 +15,28 @@ model User {
   cpf       String  @unique
   email     String  @unique
   phone     String  @unique
+  role      String  @default("user")
   firstName String
   lastName  String
   password  String?
 
-  tasks Task[]
+  Child Child[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
 
-model Task {
-  id     String  @id @default(cuid())
-  title  String
-  done   Boolean @default(false)
-  userId String
-
-  user User @relation(fields: [userId], references: [id])
+model Child {
+  id        String   @id @default(cuid())
+  name      String
+  birthDate DateTime
+  address   String?
+  latitude  Float?
+  longitude Float?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  guardian   User   @relation(fields: [guardianId], references: [id])
+  guardianId String
 }

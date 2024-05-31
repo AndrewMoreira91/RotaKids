@@ -1,7 +1,5 @@
-import { UUID } from "crypto"
 import prisma from "../lib/prima"
 import { UserProps } from "../types/user.type"
-import { QueryParams } from "../app"
 import { Prisma } from "@prisma/client"
 
 async function createUser(data: UserProps) {
