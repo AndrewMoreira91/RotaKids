@@ -69,8 +69,8 @@ app.get('/users/:id', async (req, res) => {
 app.post('/maps/address', async (req, res) => {
 	try {
 		console.log(req.body)
-		const { rua, bairro }: AddressProps = req.body
-		const result = await addressValidation({ rua, bairro})
+		const { address }: AddressProps = req.body
+		const result = await addressValidation({ address })
 		res.status(200).json(result)
 	} catch (error) {
 		res.status(400).json({error, message: "Erro interno do servidor"})

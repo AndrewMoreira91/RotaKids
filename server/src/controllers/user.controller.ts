@@ -12,6 +12,7 @@ async function createUser(data: UserProps) {
 			email: true,
 			phone: true,
 			password: false,
+			role: true,
 			cpf: true,
 		}
 	})
