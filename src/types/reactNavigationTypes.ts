@@ -17,4 +17,6 @@ export type HomeStackParamList = {
   Payments: undefined;
   Guardians: undefined;
   ManageRoutes: undefined;
+  Schools: undefined;
+  SchoolsRegister: undefined;
 };

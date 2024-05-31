@@ -111,6 +111,13 @@ export default function HomeScreen({ navigation }: Props) {
 							description="Gerencia os renponsãveis pelas as crianças que você transporta"
 							onPress={() => navigation.navigate("Guardians")}
 						/>
+						<Divisor />
+						<ListItem
+							icon={require("@/assets/icons/icon-guardian.png")}
+							title="Escolas"
+							description="Gerencia as escolas que você transporta"
+							onPress={() => navigation.navigate("Schools")}
+						/>
 					</View>
 
 				</View>

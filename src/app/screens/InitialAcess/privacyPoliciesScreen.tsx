@@ -36,8 +36,9 @@ export default function PrivacyPoliciesScreen({ navigation, route }: Props) {
 	async function handleNext() {
 		if (checked === true) {
 			setIsLoading(true)
-			const response = await api.post("/users", route.params.user)
+			const response = await api.post("/users", { ...route.params.user, role: "driver" })
 				.finally(() => setIsLoading(false))
+			console.log(response.data)
 			if (response.data) {
 				signIn(response.data)
 			}

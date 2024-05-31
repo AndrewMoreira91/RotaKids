@@ -16,6 +16,11 @@ type Props = NativeStackScreenProps<HomeStackParamList, "GuardiansRegister">;
 export function GuardianRegisterScreen({ navigation }: Props) {
 	const [cpf, setCpf] = useState<string>("");
 	const [phone, setPhone] = useState<string>("");
+	const [email, setEmail] = useState<string>("");
+	const [firstName, setFisrtName] = useState<string>("");
+	const [lastName, setLastName] = useState<string>("");
+
+	const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
 	function handleSave() {
 		navigation.goBack();
@@ -33,14 +38,22 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 							<View>
 								<Text className="text-xl font-semibold">Primeiro nome do responsável</Text>
 								<Input>
-									<Input.Field placeholder="Digite aqui o nome do responsável" />
+									<Input.Field
+										placeholder="Digite aqui o nome do responsável"
+										value={firstName}
+										onChangeText={value => setFisrtName(value)}
+									/>
 								</Input>
 							</View>
 
 							<View>
 								<Text className="text-xl font-semibold"> Sobrenome do responsável</Text>
 								<Input>
-									<Input.Field placeholder="Digite aqui o sobrenome do responsável" />
+									<Input.Field
+										placeholder="Digite aqui o sobrenome do responsável"
+										value={lastName}
+										onChangeText={value => setLastName(value)}
+									/>
 								</Input>
 							</View>
 
@@ -63,6 +76,8 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 									<Input.Field
 										placeholder="Digite aqui o email"
 										keyboardType="email-address"
+										value={email}
+										onChangeText={value => setEmail(value)}
 									/>
 								</Input>
 							</View>
@@ -80,7 +95,7 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 								</Input>
 							</View>
 
-							<Button onPress={() => handleSave()}>
+							<Button isDisabled={isDisabled} onPress={() => handleSave()}>
 								<Button.Text title="Salvar" />
 							</Button>
 						</View>
