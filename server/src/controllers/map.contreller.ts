@@ -20,7 +20,6 @@ async function addressValidation({ address }: AddressProps) {
 			latitude: response[0].result.geocode.location.latitude,
 			longitude: response[0].result.geocode.location.longitude
 		}
-		console.log(result);
 		return result;
 	} catch (error) {
 		console.error(error);

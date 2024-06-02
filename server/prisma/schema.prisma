@@ -15,7 +15,7 @@ model User {
   cpf       String  @unique
   email     String  @unique
   phone     String  @unique
-  role      String  @default("user")
+  role      String
   firstName String
   lastName  String
   password  String?

@@ -29,6 +29,7 @@ async function getUsers() {
 			phone: true,
 			password: false,
 			cpf: true,
+			role: true
 		}
 	})
 	return users
@@ -47,6 +48,7 @@ async function getUserById(id: string) {
 			phone: true,
 			password: false,
 			cpf: false,
+			role: true
 		}
 	})
 	if (user !== null) {
@@ -71,6 +73,7 @@ async function updateUser(id: string, data: UserProps) {
 				phone: true,
 				password: false,
 				cpf: false,
+				role: true
 			}
 		})
 		if (user === null) {
@@ -107,9 +110,10 @@ async function deleteUser(id: string) {
 	}
 }
 
-async function getUserByParams(params: Prisma.UserWhereUniqueInput) {
+async function getUserByParams(params: Prisma.UserWhereInput) {
 	try {
-		const user = await prisma.user.findUnique({
+		console.log(params)
+		const user = await prisma.user.findMany({
 			where: params,
 			select: {
 				id: true,
@@ -119,6 +123,8 @@ async function getUserByParams(params: Prisma.UserWhereUniqueInput) {
 				phone: true,
 				password: false,
 				cpf: true,
+				role: true,
+				Child: true
 			}
 		})
 		if (user !== null) {
