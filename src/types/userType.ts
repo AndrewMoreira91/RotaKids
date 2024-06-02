@@ -5,7 +5,16 @@ export type UserProps = {
 	email: string;
 	phone: string;
 	cpf: string;
-	role: "driver" | "guardian";
+}
+
+export type DriverProps = {
+	id: string;
+	firstName: string;
+	lastName: string;
+	email: string;
+	phone: string;
+	cpf: string;
+	guardians: string[];
 }
 
 export type GuardianProps = {
@@ -16,6 +25,7 @@ export type GuardianProps = {
 	phone: string;
 	role: string;
 	cpf: string;
+	guardianId: string;
 	childs: string[];
 }
 
@@ -28,6 +38,7 @@ export type ChildProps = {
 	longitude: number;
 	guardianId: string;
 	schoolId: string;
+	driverId: string;
 }
 
 export type SchoolProps = {
@@ -36,5 +47,6 @@ export type SchoolProps = {
 	address: string;
 	latitude: number;
 	longitude: number;
+	driverId: string;
 	childs?: string[];
 }

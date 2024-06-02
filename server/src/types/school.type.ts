@@ -3,4 +3,5 @@ export type SchoolProps = {
 	address: string;
 	latitude: number;
 	longitude: number;
+	driverId: string;
 }

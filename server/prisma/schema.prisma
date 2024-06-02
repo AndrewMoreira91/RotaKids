@@ -10,15 +10,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Driver {
   id        String  @id @default(cuid())
   cpf       String  @unique
   email     String? @unique
   phone     String  @unique
-  role      String
   firstName String
   lastName  String
   password  String?
+
+  childs    Child[]
+  guardians Guardian[]
+  School    School[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Guardian {
+  id        String  @id @default(cuid())
+  cpf       String  @unique
+  email     String? @unique
+  phone     String  @unique
+  firstName String
+  lastName  String
+  password  String?
+
+  driver   Driver @relation(fields: [driverId], references: [id])
+  driverId String
 
   childs Child[]
 
@@ -34,13 +53,17 @@ model Child {
   latitude  Float?
   longitude Float?
 
+  school   School @relation(fields: [schoolId], references: [id])
+  schoolId String
+
+  guardian   Guardian @relation(fields: [guardianId], references: [id])
+  guardianId String
+
+  driver   Driver? @relation(fields: [driverId], references: [id])
+  driverId String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-
-  school     School @relation(fields: [schoolId], references: [id])
-  schoolId   String
-  guardian   User   @relation(fields: [guardianId], references: [id])
-  guardianId String
 }
 
 model School {
@@ -50,7 +73,10 @@ model School {
   latitude  Float
   longitude Float
 
+  driver   Driver  @relation(fields: [driverId], references: [id])
+  driverId String
+  childs   Child[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
-  childs    Child[]
 }

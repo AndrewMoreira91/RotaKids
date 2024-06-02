@@ -1,9 +1,18 @@
-export type UserProps = {
+export type DriverProps = {
 	firstName: string,
 	lastName: string,
 	phone: string,
 	cpf: string,
 	email: string,
 	password?: string
-	role: "guardian" | "driver"
+}
+
+export type GuardianProps = {
+	firstName: string,
+	lastName: string,
+	phone: string,
+	cpf: string,
+	email: string,
+	password?: string
+	driverId: string
 }
