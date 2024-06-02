@@ -37,6 +37,20 @@ model Child {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
+  school     School @relation(fields: [schoolId], references: [id])
+  schoolId   String
   guardian   User   @relation(fields: [guardianId], references: [id])
   guardianId String
+}
+
+model School {
+  id        String @id @default(cuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  Child     Child[]
 }

@@ -5,4 +5,5 @@ export type ChildProps = {
 	latitude: number
 	longitude: number
 	guardianId: string
+	schoolId: string
 }
