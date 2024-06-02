@@ -5,4 +5,5 @@ export type UserProps = {
 	cpf: string,
 	email: string,
 	password?: string
+	role: "guardian" | "driver"
 }

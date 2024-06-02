@@ -71,9 +71,9 @@ async function updateUser(id: string, data: UserProps) {
 				lastName: true,
 				email: true,
 				phone: true,
-				password: false,
-				cpf: false,
-				role: true
+				password: true,
+				cpf: true,
+				role: true,
 			}
 		})
 		if (user === null) {
@@ -97,8 +97,6 @@ async function deleteUser(id: string) {
 				lastName: true,
 				email: true,
 				phone: true,
-				password: false,
-				cpf: false,
 			}
 		})
 		if (user === null) {
@@ -119,12 +117,12 @@ async function getUserByParams(params: Prisma.UserWhereInput) {
 				id: true,
 				firstName: true,
 				lastName: true,
-				email: true,
-				phone: true,
-				password: false,
-				cpf: true,
 				role: true,
-				Child: true
+				childs: {
+					select: {
+						id: true,
+					}
+				}
 			}
 		})
 		if (user !== null) {
