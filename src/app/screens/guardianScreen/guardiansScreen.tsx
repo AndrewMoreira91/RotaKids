@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlatList, ScrollView, StatusBar, Text, View } from "react-native";
+import { ScrollView, StatusBar, View } from "react-native";
 
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
-import { useGuardianStore } from "@/store/guardian-store";
 import api from "@/lib/axios";
 
 import MainConteiner from "@/components/mainConteiner";
 import Button from "@/components/button";
 import Header from "@/components/header";
 import Loading from "@/components/loading";
-import { GuardianProps, UserProps } from "@/types/userType";
-import ButtonPill from "@/components/buttonPill";
+import { GuardianProps } from "@/types/userType";
 import Divisor from "@/components/divisor";
 import ListItemInfo from "@/components/listItemInfo";
 import { StackNavigationState } from "@react-navigation/native";

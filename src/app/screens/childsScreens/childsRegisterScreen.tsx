@@ -150,7 +150,6 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 		console.log(data)
 		api.post("/childs", data)
 			.then(response => {
-				console.log(response.data)
 				navigation.goBack()
 			})
 			.catch(error => {

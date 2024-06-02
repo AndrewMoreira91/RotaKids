@@ -36,4 +36,5 @@ export type SchoolProps = {
 	address: string;
 	latitude: number;
 	longitude: number;
+	childs?: string[];
 }

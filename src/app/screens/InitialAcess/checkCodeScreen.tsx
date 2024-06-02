@@ -45,7 +45,7 @@ export default function CheckCodeScreen({ navigation, route }: Props) {
 		// if (!code) {
 		// 	Alert.alert("Codigo", "Por favor, insira um código válido.")
 		// }
-		if ("email" in route.params.user) {
+		if ("id" in route.params.user) {
 			signIn(route.params.user)
 		} else {
 			navigation.navigate("Register", {

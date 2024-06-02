@@ -110,7 +110,6 @@ async function deleteUser(id: string) {
 
 async function getUserByParams(params: Prisma.UserWhereInput) {
 	try {
-		console.log(params)
 		const user = await prisma.user.findMany({
 			where: params,
 			select: {
@@ -118,9 +117,9 @@ async function getUserByParams(params: Prisma.UserWhereInput) {
 				firstName: true,
 				lastName: true,
 				role: true,
-				childs: {
+				_count: {
 					select: {
-						id: true,
+						childs: true
 					}
 				}
 			}
@@ -135,11 +134,34 @@ async function getUserByParams(params: Prisma.UserWhereInput) {
 	}
 }
 
+async function getUserByCpf(cpf: string) {
+	try {
+		const user = await prisma.user.findMany({
+			where: {
+				cpf
+			},
+			select: {
+				id: true,
+				firstName: true,
+				lastName: true,
+				role: true,
+				cpf: true,
+				email: true,
+				phone: true,
+			}
+		})
+		return user
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 export const userController = {
 	createUser,
 	getUsers,
 	getUserById,
 	updateUser,
 	deleteUser,
-	getUserByParams
+	getUserByParams,
+	getUserByCpf
 }

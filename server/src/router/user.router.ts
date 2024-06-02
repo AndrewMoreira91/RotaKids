@@ -45,11 +45,19 @@ router
 			res.status(400).json({ error, message: "Erro interno do servidor" })
 		}
 	})
-
 	.get('/users/:id', async (req, res) => {
 		try {
 			const { id } = req.params
 			const user = await userController.getUserById(id)
+			res.status(200).json(user)
+		} catch (error) {
+			res.status(400).json({ error, message: "Erro interno do servidor" })
+		}
+	})
+	.get('/users/cpf/:cpf', async (req, res) => {
+		try {
+			const { cpf } = req.params
+			const user = await userController.getUserByCpf(cpf)
 			res.status(200).json(user)
 		} catch (error) {
 			res.status(400).json({ error, message: "Erro interno do servidor" })
