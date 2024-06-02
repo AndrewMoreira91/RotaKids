@@ -11,7 +11,8 @@ async function createChild(data: ChildProps) {
 			address: true,
 			latitude: true,
 			longitude: true,
-			guardianId: true
+			guardianId: true,
+			schoolId: true
 		}
 	})
 	return child
@@ -53,6 +54,27 @@ async function getChildrenByGuardianId(guardianId: string) {
 	return children
 }
 
+async function getChilds() {
+	try {
+		const childs = await prisma.child.findMany({
+			select: {
+				id: true,
+				name: true,
+				birthDate: true,
+				address: true,
+				latitude: true,
+				longitude: true,
+				guardianId: true
+			}
+		})
+		return childs
+	} catch (error) {
+		console.error(error)
+		return error
+	}
+}
+
 export const childController = {
-	createChild
+	createChild,
+	getChilds,
 }

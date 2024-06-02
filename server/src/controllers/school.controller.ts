@@ -1,11 +1,16 @@
 import prisma from "../lib/prima"
-import { ChildProps } from "../types/child.type"
+import { SchoolProps } from "../types/school.type"
 
-async function createScholl(data: ChildProps) {
-	const child = await prisma.child.create({
-		data,
-	})
-	return child
+async function createScholl(data: SchoolProps) {
+	try {
+		const school = await prisma.school.create({
+			data,
+		})
+		return school
+	} catch (error) {
+		console.log(error)
+		return error
+	}
 }
 
 async function getScholls() {
