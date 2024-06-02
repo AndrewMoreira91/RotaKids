@@ -1,7 +1,7 @@
 import { colors } from "@/styles/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { ReactNode } from "react";
-import { TouchableOpacity, TouchableOpacityProps, Text } from "react-native";
+import { TouchableOpacity, TouchableOpacityProps, Text, ActivityIndicator } from "react-native";
 
 type ButtonPillProps = TouchableOpacityProps & {
 	title?: string;
@@ -10,9 +10,19 @@ type ButtonPillProps = TouchableOpacityProps & {
 	theme?: "primary" | "secondary";
 	variant?: "default" | "small",
 	isDisabled?: boolean;
+	isLoading?: boolean;
 }
 
-function ButtonPill({ title, arrowIcon, iconPosition="left", theme = "primary", isDisabled, variant = "default", ...rest }: ButtonPillProps) {
+function ButtonPill({
+	title,
+	arrowIcon,
+	iconPosition = "left",
+	theme = "primary",
+	isDisabled,
+	variant = "default",
+	isLoading,
+	...rest
+}: ButtonPillProps) {
 	return (
 		<TouchableOpacity
 			className="self-start rounded-full flex-row items-center justify-center gap-1"
@@ -25,6 +35,7 @@ function ButtonPill({ title, arrowIcon, iconPosition="left", theme = "primary", 
 			{...rest}
 			disabled={isDisabled}
 		>
+			{isLoading && <ActivityIndicator color={colors.gray[25]} />}
 			{
 				iconPosition === "left" ?
 					arrowIcon && <MaterialCommunityIcons

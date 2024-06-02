@@ -1,4 +1,4 @@
-import { UserProps } from "./userType";
+import { GuardianProps, UserProps } from "./userType";
 
 export type AuthStackParamList = {
   InitialAcessPage: undefined;
@@ -13,9 +13,9 @@ export type HomeStackParamList = {
   Home: undefined;
   Childs: undefined;
   ChildRegister: undefined;
-  GuardiansRegister: undefined;
   Payments: undefined;
-  Guardians: undefined;
+  Guardians: undefined | { guardian: GuardianProps };
+  GuardiansRegister: undefined;
   ManageRoutes: undefined;
   Schools: undefined;
   SchoolsRegister: undefined;

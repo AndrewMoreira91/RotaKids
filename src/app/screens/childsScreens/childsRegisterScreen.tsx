@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { StatusBar, View, Text, Platform, TouchableOpacity, ScrollView } from "react-native";
+import { StatusBar, View, Text, Platform, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetFlatList, BottomSheetView } from "@gorhom/bottom-sheet";
 
 import * as Location from 'expo-location';
 
@@ -17,18 +17,28 @@ import MapView, { Marker } from "react-native-maps";
 
 import api from "@/lib/axios";
 import ButtonPill from "@/components/buttonPill";
+import { useGuardianStore } from "@/store/guardian-store";
+import { GuardianProps, SchoolProps } from "@/types/userType";
+import Loading from "@/components/loading";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "ChildRegister">;
 
 export function ChildsRegisterScreen({ navigation }: Props) {
+	const [name, setName] = useState("");
+	const [dateOfBirth, setDateOfBirth] = useState("16 de julho de 2002");
+	const [childLocation, setChildLocation] = useState<{ latitude: number, longitude: number } | null>(null);
+	const [guardian, setGuardian] = useState<GuardianProps | null>(null);
+	const [school, setSchool] = useState<SchoolProps | null>(null);
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	const [guardiansList, setGuardiansList] = useState<GuardianProps[]>([])
+	const [schoolsList, setSchoolsList] = useState<SchoolProps[]>([])
 
 	const [date, setDate] = useState<Date>(new Date());
 	const [showPicker, setShowPicker] = useState(false);
 
-	const [dateOfBirth, setDateOfBirth] = useState("16 de julho de 2002");
-
 	const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
-	const [childLocation, setChildLocation] = useState<{ latitude: number, longitude: number } | null>(null);
 	const [address, setAddress] = useState("");
 
 	useEffect(() => {
@@ -48,16 +58,28 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 		})();
 	}, []);
 
+
 	async function handleSearchAddress() {
-		const response = await api.post("maps/address", { address });
-		const { latitude, longitude } = response.data;
-		setAddress(response.data.formattedAddress);
-
-		setLocation({ latitude, longitude })
-		setChildLocation({ latitude, longitude })
+		if (address === "") return;
+		setIsLoading(true);
+		try {
+			await api.post("maps/address", { address })
+				.then(response => {
+					const { latitude, longitude, formattedAddress } = response.data;
+					setChildLocation({ latitude, longitude });
+					setLocation({ latitude, longitude });
+					setAddress(formattedAddress);
+					return response.data;
+				})
+				.catch(error => {
+					console.log(error);
+					return null;
+				})
+				.finally(() => setIsLoading(false));
+		} catch (error) {
+			console.log(error);
+		}
 	}
-
-	console.log(address);
 
 	const togleDatePicker = () => {
 		setShowPicker(!showPicker);
@@ -75,6 +97,28 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 		} else {
 			togleDatePicker();
 		}
+	}
+
+	async function loadGuardians() {
+		console.log("loadGuardians")
+		try {
+			await api.get("/users/search?role=guardian")
+				.then(response => {
+					setGuardiansList(response.data)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	function handleSave() {
+
 	}
 
 	const bottomSheetGuardianRef = useRef<BottomSheet>(null);
@@ -121,16 +165,23 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 						<View>
 							<Text className="text-xl font-semibold">Responsavel</Text>
-							<TouchableOpacity onPress={() => bottomSheetGuardianRef.current?.snapToIndex(1)}>
+							<TouchableOpacity onPress={() => {
+								loadGuardians()
+								bottomSheetGuardianRef.current?.snapToIndex(1)
+							}}>
 								<Input>
-									<Input.Field placeholder="Escolha o responsavel da criança" editable={false} />
+									<Input.Field
+										value={guardian ? `${guardian.firstName} ${guardian.lastName}` : ""}
+										placeholder="Escolha o responsavel da criança"
+										editable={false}
+									/>
 								</Input>
 							</TouchableOpacity>
 						</View>
 
 						<View>
 							<Text className="text-xl font-semibold">Escola</Text>
-							<TouchableOpacity onPress={() => bottomSheetSchollRef.current?.snapToIndex(1)}>
+							<TouchableOpacity activeOpacity={0.9} onPress={() => bottomSheetSchollRef.current?.snapToIndex(1)}>
 								<Input>
 									<Input.Field placeholder="Escolha a escola da criança" editable={false} />
 								</Input>
@@ -139,7 +190,7 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 						<View>
 							<Text className="text-xl font-semibold">Endereço da criança</Text>
-							<TouchableOpacity onPress={() => bottomSheetAddressRef.current?.snapToIndex(1)}>
+							<TouchableOpacity activeOpacity={0.9} onPress={() => bottomSheetAddressRef.current?.snapToIndex(1)}>
 								<Input>
 									<Input.Field placeholder="Coloque o endereço" value={address} editable={false} />
 								</Input>
@@ -166,6 +217,21 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 						}}>
 							<Button.Text title="Adicionar novo responsavel" />
 						</Button>
+
+						{guardiansList.length === 0 ?
+							<View className="flex-1 mt-6">
+								<Loading />
+							</View> :
+							guardiansList.map((guardian, index) => (
+								<TouchableOpacity key={index} onPress={() => {
+									bottomSheetGuardianRef.current?.close();
+									setGuardian(guardian)
+								}}>
+									<Text className="text-ink-normal text-lg">{guardian.firstName} {guardian.lastName}</Text>
+								</TouchableOpacity>
+							)
+							)}
+
 					</BottomSheetView>
 				</BottomSheet>
 
@@ -198,7 +264,7 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 								onChangeText={setAddress}
 							/>
 						</Input>
-						<Button onPress={handleSearchAddress}>
+						<Button isLoading={isLoading} onPress={handleSearchAddress}>
 							<Button.Text title="Buscar" />
 						</Button>
 
@@ -248,6 +314,7 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 							</MapView>
 						)}
 						<ButtonPill
+							isLoading={isLoading}
 							onPress={() => bottomSheetAddressRef.current?.close()}
 							title="O endereço está correto, continuar"
 							isDisabled={!childLocation}

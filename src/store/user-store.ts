@@ -13,14 +13,15 @@ export const useUserStore = create(
 	persist<UseStoreProps>(set => ({
 		user: null,
 		
-		signIn: ({id, firstName, lastName, email, phone, cpf }: UserProps) => set({
+		signIn: ({id, firstName, lastName, email, phone, cpf, role }: UserProps) => set({
 			user: {
 				id,
 				firstName,
 				lastName,
 				email,
 				phone,
-				cpf
+				cpf,
+				role
 			}
 		}),
 

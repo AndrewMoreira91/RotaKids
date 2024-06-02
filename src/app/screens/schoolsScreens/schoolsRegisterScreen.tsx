@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StatusBar, View, Text, ScrollView } from "react-native";
+import { StatusBar, View, Text, ScrollView, Alert } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import MapView, { Marker } from "react-native-maps";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -15,20 +15,29 @@ import { Input } from "@/components/input";
 import Button from "@/components/button";
 import Header from "@/components/header";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { SchoolProps } from "@/types/userType";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "SchoolsRegister">;
 
 export function SchoolsRegisterScreen({ navigation }: Props) {
+	const [name, setName] = useState("");
+	const [address, setAddress] = useState("");
+	const [schoolLocation, setSchoolLocation] = useState<{ latitude: number, longitude: number } | null>(null);
+
+	const [isDisabled, setIsDisabled] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const bottomSheetAddressRef = useRef<BottomSheet>(null);
 
-	function handleSave() {
-		navigation.goBack();
+	function handleButton() {
+		if (name && address) {
+			setIsDisabled(false)
+		} else {
+			setIsDisabled(true)
+		}
 	}
 
 	const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
-	const [schoolLocation, setSchoolLocation] = useState<{ latitude: number, longitude: number } | null>(null);
-	const [address, setAddress] = useState("");
 
 	useEffect(() => {
 		(async () => {
@@ -48,12 +57,49 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 	}, []);
 
 	async function handleSearchAddress() {
-		const response = await api.post("maps/address", { address });
-		const { latitude, longitude } = response.data;
-		setAddress(response.data.formattedAddress);
+		if (address === "") return;
+		setIsLoading(true);
+		try {
+			await api.post("maps/address", { address })
+				.then(response => {
+					const { latitude, longitude, formattedAddress } = response.data;
+					setSchoolLocation({ latitude, longitude });
+					setLocation({ latitude, longitude });
+					setAddress(formattedAddress);
+					return response.data;
+				})
+				.catch(error => {
+					console.log(error);
+					return null;
+				})
+				.finally(() => setIsLoading(false));
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
-		setLocation({ latitude, longitude })
-		setSchoolLocation({ latitude, longitude })
+	function handleSave() {
+		if (name && address && schoolLocation) {
+			setIsLoading(true)
+			const data = {
+				name,
+				address,
+				latitude: schoolLocation.latitude,
+				longitude: schoolLocation.longitude
+			} as SchoolProps
+			api.post("/schools", data)
+				.then(response => {
+					console.log(response.data)
+					navigation.goBack()
+				})
+				.catch(error => {
+					console.log(error)
+					Alert.alert("Erro", "Não foi possível cadastrar a escola, tente novamente mais tarde")
+				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		}
 	}
 
 	return (
@@ -68,7 +114,14 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 							<View>
 								<Text className="text-xl font-semibold">Nome da escola</Text>
 								<Input>
-									<Input.Field placeholder="Digite aqui o nome da escola" />
+									<Input.Field
+										placeholder="Digite aqui o nome da escola"
+										value={name}
+										onChangeText={value => {
+											setName(value)
+											handleButton()
+										}}
+									/>
 								</Input>
 							</View>
 
@@ -76,12 +129,16 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 								<Text className="text-xl font-semibold">Endereço da escola</Text>
 								<TouchableOpacity activeOpacity={0.8} onPress={() => bottomSheetAddressRef.current?.snapToIndex(1)}>
 									<Input>
-										<Input.Field placeholder="Coloque o endereço" value={address} editable={false} />
+										<Input.Field
+											placeholder="Coloque o endereço"
+											value={address}
+											editable={false}
+										/>
 									</Input>
 								</TouchableOpacity>
 							</View>
 
-							<Button onPress={() => handleSave()}>
+							<Button isDisabled={isDisabled} onPress={() => handleSave()}>
 								<Button.Text title="Salvar" />
 							</Button>
 						</View>
@@ -100,7 +157,7 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 								onChangeText={setAddress}
 							/>
 						</Input>
-						<Button onPress={handleSearchAddress}>
+						<Button isLoading={isLoading} onPress={handleSearchAddress}>
 							<Button.Text title="Buscar" />
 						</Button>
 
@@ -150,7 +207,11 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 							</MapView>
 						)}
 						<ButtonPill
-							onPress={() => bottomSheetAddressRef.current?.close()}
+							isLoading={isLoading}
+							onPress={() => {
+								handleButton()
+								bottomSheetAddressRef.current?.close()
+							}}
 							title="O endereço está correto, continuar"
 							isDisabled={!schoolLocation}
 						/>

@@ -1,40 +1,82 @@
+import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlatList, StatusBar, Text, View } from "react-native";
+import { FlatList, ScrollView, StatusBar, Text, View } from "react-native";
 
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
+import { useGuardianStore } from "@/store/guardian-store";
+import api from "@/lib/axios";
 
 import MainConteiner from "@/components/mainConteiner";
 import Button from "@/components/button";
 import Header from "@/components/header";
+import Loading from "@/components/loading";
+import { GuardianProps, UserProps } from "@/types/userType";
+import ButtonPill from "@/components/buttonPill";
+import Divisor from "@/components/divisor";
+import ListItemInfo from "@/components/listItemInfo";
+import { StackNavigationState } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Guardians">;
 
-export function GuardiansScreen({ navigation }: Props) {
+export function GuardiansScreen({ navigation, route }: Props) {
+	const [isLoading, setIsLoading] = useState(true);
 
-	const guardians = [
-		{
-			name: "João"
-		},
-		{
-			name: "Maria"
+	const [guardiansList, setGuardiansList] = useState<GuardianProps[]>([])
+
+	async function loadGuardians() {
+		console.log("loadGuardians")
+		try {
+			await api.get("/users/search?role=guardian")
+				.then(response => {
+					setGuardiansList(response.data)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		} catch (error) {
+			console.log(error)
 		}
-	]
+	}
+	useEffect(() => {
+		loadGuardians()
+	}, [])
+
+	const { routes }: StackNavigationState<HomeStackParamList> = navigation.getState()
+	if (routes[routes.length - 2].name === "GuardiansRegister") {
+		if (route.params?.guardian) {
+			const guardian = route.params.guardian
+			setGuardiansList([...guardiansList, guardian])
+		}
+	}
 
 	return (
 		<>
 			<Header title="Responsáveis" navigation={navigation} />
 			<MainConteiner style={{ marginTop: 0 }}>
 				<StatusBar barStyle={"dark-content"} />
-				<View className="gap-4">
+				<View className="gap-4 mb-20">
 
 					<Button onPress={() => navigation.navigate("GuardiansRegister")}>
 						<Button.Text title="Adicionar um novo responsável" />
 					</Button>
 
-					<FlatList
-						data={guardians}
-						renderItem={({ item }) => <Text>{item.name}</Text>}
-					/>
+					{isLoading && <View className="h-full justify-center items-center"><Loading /></View>}
+					<ScrollView>
+						{guardiansList.map((guardian, index) => {
+							return (
+								<View key={index}>
+									<ListItemInfo
+										title={`${guardian.firstName} ${guardian.lastName}`}
+										secondTitle={`${guardian.childs === undefined ? "0" : guardian.childs.length} criança(s)`}
+									/>
+									<Divisor />
+								</View>
+							)
+						})}
+					</ScrollView>
 
 				</View>
 			</MainConteiner>
