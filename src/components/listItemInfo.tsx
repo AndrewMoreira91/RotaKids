@@ -10,10 +10,10 @@ type ListItemInfoProps = {
 function ListItemInfo({ title, secondTitle }: ListItemInfoProps ) {
 	
 	return (
-		<View className="py-3 flex-row items-center justify-between">
-			<View>
+		<View className=" w-full py-3 flex-row items-center justify-between">
+			<View className="flex-auto">
 				<Text className="font-semibold text-2xl">{title}</Text>
-				{secondTitle && <Text className="font-bold leading-5">{secondTitle}</Text>}
+				{secondTitle && <Text className="font-regular leading-5">{secondTitle}</Text>}
 			</View>
 			<ButtonPill title="Detalhes" />
 		</View>

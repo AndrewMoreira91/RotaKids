@@ -18,28 +18,29 @@ import MapView, { Marker } from "react-native-maps";
 import api from "@/lib/axios";
 import ButtonPill from "@/components/buttonPill";
 import { useGuardianStore } from "@/store/guardian-store";
-import { GuardianProps, SchoolProps } from "@/types/userType";
+import { ChildProps, GuardianProps, SchoolProps } from "@/types/userType";
 import Loading from "@/components/loading";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "ChildRegister">;
 
 export function ChildsRegisterScreen({ navigation }: Props) {
 	const [name, setName] = useState("");
-	const [dateOfBirth, setDateOfBirth] = useState("16 de julho de 2002");
 	const [childLocation, setChildLocation] = useState<{ latitude: number, longitude: number } | null>(null);
 	const [guardian, setGuardian] = useState<GuardianProps | null>(null);
 	const [school, setSchool] = useState<SchoolProps | null>(null);
+	const [date, setDate] = useState<Date>(new Date());
 
 	const [isLoading, setIsLoading] = useState(false);
 
 	const [guardiansList, setGuardiansList] = useState<GuardianProps[]>([])
 	const [schoolsList, setSchoolsList] = useState<SchoolProps[]>([])
 
-	const [date, setDate] = useState<Date>(new Date());
 	const [showPicker, setShowPicker] = useState(false);
 
 	const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
 	const [address, setAddress] = useState("");
+
+	const [dateOfBirth, setDateOfBirth] = useState("");
 
 	useEffect(() => {
 		(async () => {
@@ -100,7 +101,6 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 	}
 
 	async function loadGuardians() {
-		console.log("loadGuardians")
 		try {
 			await api.get("/users/search?role=guardian")
 				.then(response => {
@@ -117,8 +117,48 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 		}
 	}
 
-	function handleSave() {
+	async function loadSchools() {
+		try {
+			await api.get("/schools")
+				.then(response => {
+					setSchoolsList(response.data)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
+	function handleSave() {
+		if (!name || !dateOfBirth || !guardian || !school || !childLocation) return;
+		console.log("salvando")
+		setIsLoading(true);
+		const data = {
+			name,
+			birthDate: date,
+			address,
+			latitude: childLocation.latitude,
+			longitude: childLocation.longitude,
+			guardianId: guardian.id,
+			schoolId: school.id
+		} as ChildProps
+		console.log(data)
+		api.post("/childs", data)
+			.then(response => {
+				console.log(response.data)
+				navigation.goBack()
+			})
+			.catch(error => {
+				console.log(error)
+			})
+			.finally(() => {
+				setIsLoading(false)
+			})
 	}
 
 	const bottomSheetGuardianRef = useRef<BottomSheet>(null);
@@ -135,7 +175,11 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 						<View>
 							<Text className="text-xl font-semibold">Nome da criança completo</Text>
 							<Input>
-								<Input.Field placeholder="Digite aqui o nome da criança" />
+								<Input.Field
+									placeholder="Digite aqui o nome da criança"
+									value={name}
+									onChangeText={setName}
+								/>
 							</Input>
 						</View>
 
@@ -155,7 +199,7 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 								<Input>
 									<Input.Field
 										className="text-lg text-ink-normal"
-										placeholder={"16 de julho de 2002"}
+										placeholder={"Escolha a data de nascimento"}
 										editable={false}
 										value={dateOfBirth}
 									/>
@@ -181,9 +225,16 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 						<View>
 							<Text className="text-xl font-semibold">Escola</Text>
-							<TouchableOpacity activeOpacity={0.9} onPress={() => bottomSheetSchollRef.current?.snapToIndex(1)}>
+							<TouchableOpacity activeOpacity={0.9} onPress={() => {
+								loadSchools()
+								bottomSheetSchollRef.current?.snapToIndex(1)
+							}}>
 								<Input>
-									<Input.Field placeholder="Escolha a escola da criança" editable={false} />
+									<Input.Field
+										value={school ? school.name : ""}
+										placeholder="Escolha a escola da criança"
+										editable={false}
+									/>
 								</Input>
 							</TouchableOpacity>
 						</View>
@@ -197,7 +248,7 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 							</TouchableOpacity>
 						</View>
 
-						<Button>
+						<Button isLoading={isLoading} onPress={handleSave}>
 							<Button.Text title="Salvar" />
 						</Button>
 					</View>
@@ -231,7 +282,6 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 								</TouchableOpacity>
 							)
 							)}
-
 					</BottomSheetView>
 				</BottomSheet>
 
@@ -249,6 +299,20 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 						}}>
 							<Button.Text title="Adicionar nova escola" />
 						</Button>
+
+						{schoolsList.length === 0 ?
+							<View className="flex-1 mt-6">
+								<Loading />
+							</View> :
+							schoolsList.map((school, index) => (
+								<TouchableOpacity key={index} onPress={() => {
+									bottomSheetSchollRef.current?.close();
+									setSchool(school)
+								}}>
+									<Text className="text-ink-normal text-lg">{school.name}</Text>
+								</TouchableOpacity>
+							)
+							)}
 					</BottomSheetView>
 				</BottomSheet>
 

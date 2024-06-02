@@ -113,9 +113,9 @@ export default function HomeScreen({ navigation }: Props) {
 						/>
 						<Divisor />
 						<ListItem
-							icon={require("@/assets/icons/icon-guardian.png")}
+							icon={require("@/assets/icons/icon-school.png")}
 							title="Escolas"
-							description="Gerencia as escolas que você transporta"
+							description="Gerencia as escolas"
 							onPress={() => navigation.navigate("Schools")}
 						/>
 					</View>

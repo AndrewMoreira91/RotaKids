@@ -19,6 +19,17 @@ export type GuardianProps = {
 	childs: string[];
 }
 
+export type ChildProps = {
+	id: string;
+	name: string;
+	birthDate: Date;
+	address: string;
+	latitude: number;
+	longitude: number;
+	guardianId: string;
+	schoolId: string;
+}
+
 export type SchoolProps = {
 	id: string;
 	name: string;

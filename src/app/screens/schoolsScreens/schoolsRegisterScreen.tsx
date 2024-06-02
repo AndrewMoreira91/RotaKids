@@ -138,7 +138,7 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 								</TouchableOpacity>
 							</View>
 
-							<Button isDisabled={isDisabled} onPress={() => handleSave()}>
+							<Button isLoading={isLoading} isDisabled={isDisabled} onPress={() => handleSave()}>
 								<Button.Text title="Salvar" />
 							</Button>
 						</View>

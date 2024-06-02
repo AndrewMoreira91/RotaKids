@@ -23,7 +23,6 @@ export function SchoolsScreen({ navigation }: Props) {
 	const [schoolList, setSchoolList] = useState<SchoolProps[]>([])
 
 	async function loadSchool() {
-		console.log("loadGuardians")
 		try {
 			await api.get("/schools")
 				.then(response => {
@@ -62,6 +61,7 @@ export function SchoolsScreen({ navigation }: Props) {
 								<View key={index}>
 									<ListItemInfo
 										title={school.name}
+										secondTitle={school.address}
 									/>
 									<Divisor />
 								</View>

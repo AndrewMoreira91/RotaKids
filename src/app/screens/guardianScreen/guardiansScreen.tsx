@@ -24,7 +24,6 @@ export function GuardiansScreen({ navigation, route }: Props) {
 	const [guardiansList, setGuardiansList] = useState<GuardianProps[]>([])
 
 	async function loadGuardians() {
-		console.log("loadGuardians")
 		try {
 			await api.get("/users/search?role=guardian")
 				.then(response => {

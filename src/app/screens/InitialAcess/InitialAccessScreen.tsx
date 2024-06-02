@@ -45,8 +45,9 @@ export default function InitialAccessScreen({ navigation }: Props) {
       setIsLoading(true)
       await api.get(`/users/search?cpf=${cpf}`)
         .then((res) => {
-          if (res.data !== null) {
-            navigation.navigate("CheckCode", { user: res.data })
+          console.log(res.data)
+          if (res.data.length > 0) {
+            navigation.navigate("CheckCode", { user: res.data[0] })
           } else {
             navigation.navigate("PhoneRegister", { user: { cpf } })
           }
