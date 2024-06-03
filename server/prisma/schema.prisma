@@ -37,7 +37,7 @@ model Guardian {
   password  String?
 
   driver   Driver @relation(fields: [driverId], references: [id])
-  driverId String
+  driverId String @unique
 
   childs Child[]
 
@@ -74,7 +74,7 @@ model School {
   longitude Float
 
   driver   Driver  @relation(fields: [driverId], references: [id])
-  driverId String
+  driverId String  @unique
   childs   Child[]
 
   createdAt DateTime @default(now())

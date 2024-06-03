@@ -10,10 +10,11 @@ export type QueryParams = {
 	firstName?: string,
 	lastName?: string,
 	phone?: string
+	driverId?: string
 }
 
 router
-	.post('/guardian', async (req, res) => {
+	.post('/guardians', async (req, res) => {
 		try {
 			const guardian = await guardianController.createGuardian(req.body)
 			res.status(201).json(guardian)
@@ -21,7 +22,7 @@ router
 			res.status(400).json({ error, message: "Erro interno do servidor" })
 		}
 	})
-	.get('/guardian', async (req, res) => {
+	.get('/guardians', async (req, res) => {
 		try {
 			const guardians = await guardianController.getGuardians()
 			res.status(200).json(guardians)
@@ -29,15 +30,16 @@ router
 			res.status(400).json({ error, message: "Erro interno do servidor" })
 		}
 	})
-	.get('/guardian/search', async (req, res) => {
+	.get('/guardians/search', async (req, res) => {
 		try {
 			let query = {} as Prisma.GuardianWhereUniqueInput
-			const { cpf, email, firstName, phone, lastName } = req.query as QueryParams
+			const { cpf, email, firstName, phone, lastName, driverId } = req.query as QueryParams
 			if (cpf) query.cpf = cpf
 			if (email) query.email = email
 			if (firstName) query.firstName = firstName
 			if (phone) query.phone = phone
 			if (lastName) query.lastName = lastName
+			if (driverId) query.driverId = driverId
 
 			const guardian = await guardianController.getGuardianByParams(query)
 			res.status(200).json(guardian)
@@ -45,7 +47,7 @@ router
 			res.status(400).json({ error, message: "Erro interno do servidor" })
 		}
 	})
-	.get('/guardian/:id', async (req, res) => {
+	.get('/guardians/:id', async (req, res) => {
 		try {
 			const { id } = req.params
 			const guardian = await guardianController.getGuardianById(id)

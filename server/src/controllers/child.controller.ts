@@ -36,24 +36,6 @@ async function getChildById(id: string) {
 	return child
 }
 
-async function getChildrenByGuardianId(guardianId: string) {
-	const children = await prisma.child.findMany({
-		where: {
-			guardianId
-		},
-		select: {
-			id: true,
-			name: true,
-			birthDate: true,
-			address: true,
-			latitude: true,
-			longitude: true,
-			guardianId: true
-		}
-	})
-	return children
-}
-
 async function getChilds() {
 	try {
 		const childs = await prisma.child.findMany({
@@ -64,7 +46,29 @@ async function getChilds() {
 				address: true,
 				latitude: true,
 				longitude: true,
-				guardianId: true
+				guardianId: true,
+			}
+		})
+		return childs
+	} catch (error) {
+		console.error(error)
+		return error
+	}
+}
+
+async function getChildsByParams(params: any) {
+	try {
+		const childs = await prisma.child.findMany({
+			where: params,
+			select: {
+				id: true,
+				name: true,
+				birthDate: true,
+				address: true,
+				latitude: true,
+				longitude: true,
+				guardianId: true,
+				schoolId: true,
 			}
 		})
 		return childs
@@ -77,4 +81,6 @@ async function getChilds() {
 export const childController = {
 	createChild,
 	getChilds,
+	getChildById,
+	getChildsByParams
 }
