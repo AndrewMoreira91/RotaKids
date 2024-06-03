@@ -14,6 +14,7 @@ import { formatDate } from "@/utils/formatToTexts";
 import ListItemInfo from "@/components/listItemInfo";
 import Divisor from "@/components/divisor";
 import Loading from "@/components/loading";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Childs">;
 
@@ -22,9 +23,11 @@ export function ChildsScreen({ navigation }: Props) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [childsList, setChildsList] = useState<ChildProps[]>([])
 
+	const { user } = useUserStore()
+
 	async function loadChilds() {
 		try {
-			await api.get("/childs")
+			await api.get(`/childs/search?driverId=${user?.id}`)
 				.then(response => {
 					setChildsList(response.data)
 				})

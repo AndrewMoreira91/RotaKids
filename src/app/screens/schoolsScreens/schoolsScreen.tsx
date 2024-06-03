@@ -13,6 +13,7 @@ import Divisor from "@/components/divisor";
 import { SchoolProps } from "@/types/userType";
 import api from "@/lib/axios";
 import Loading from "@/components/loading";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Schools">;
 
@@ -22,11 +23,15 @@ export function SchoolsScreen({ navigation }: Props) {
 
 	const [schoolList, setSchoolList] = useState<SchoolProps[]>([])
 
+	const { user } = useUserStore()
+
 	async function loadSchool() {
 		try {
-			await api.get("/schools")
+			await api.get(`/schools/search?driverId=${user?.id}`)
 				.then(response => {
-					setSchoolList(response.data)
+					if (response.data.length > 0) {
+						setSchoolList(response.data)
+					}
 				})
 				.catch(error => {
 					console.log(error)
@@ -41,7 +46,6 @@ export function SchoolsScreen({ navigation }: Props) {
 	useEffect(() => {
 		loadSchool()
 	}, [])
-
 
 	return (
 		<>

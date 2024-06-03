@@ -13,6 +13,7 @@ import { isCPFValidFormat, isEmailValid, isTelValidFormat } from "@/utils/valida
 import { GuardianProps, UserProps } from "@/types/userType";
 import api from "@/lib/axios";
 import { StackNavigationState } from "@react-navigation/native";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "GuardiansRegister">;
 
@@ -25,6 +26,8 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 
 	const [isDisabled, setIsDisabled] = useState<boolean>(true);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+
+	const { user } = useUserStore()
 
 	function handleSetFilds(value: string, field: string) {
 		// console.log("Field: ", field, "Value: ", value)
@@ -60,10 +63,10 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 				cpf,
 				email,
 				phone,
-				role: "guardian"
-			} as UserProps
+				driverId: user?.id
+			} as GuardianProps
 
-			await api.post("/users", data)
+			await api.post("/guardians", data)
 				.then(response => {
 					const guardian: GuardianProps = response.data
 					const { routes }: StackNavigationState<HomeStackParamList> = navigation.getState()

@@ -13,6 +13,7 @@ import { GuardianProps } from "@/types/userType";
 import Divisor from "@/components/divisor";
 import ListItemInfo from "@/components/listItemInfo";
 import { StackNavigationState } from "@react-navigation/native";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Guardians">;
 
@@ -21,9 +22,11 @@ export function GuardiansScreen({ navigation, route }: Props) {
 
 	const [guardiansList, setGuardiansList] = useState<GuardianProps[]>([])
 
+	const { user } = useUserStore()
+
 	async function loadGuardians() {
 		try {
-			await api.get("/users/search?role=guardian")
+			await api.get(`/guardians/search?driverId=${user?.id}`)
 				.then(response => {
 					setGuardiansList(response.data)
 				})

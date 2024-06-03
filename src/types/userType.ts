@@ -14,7 +14,7 @@ export type DriverProps = {
 	email: string;
 	phone: string;
 	cpf: string;
-	guardians: string[];
+	guardians?: string[];
 }
 
 export type GuardianProps = {
@@ -25,7 +25,7 @@ export type GuardianProps = {
 	phone: string;
 	role: string;
 	cpf: string;
-	guardianId: string;
+	driverId: string;
 	childs: string[];
 }
 

@@ -43,7 +43,7 @@ export default function InitialAccessScreen({ navigation }: Props) {
     }
     if (cpf) {
       setIsLoading(true)
-      await api.get(`/users/search?cpf=${cpf}`)
+      await api.get(`/drivers/search?cpf=${cpf}`)
         .then((res) => {
           if (res.data.length > 0) {
             navigation.navigate("CheckCode", { user: res.data[0] })

@@ -20,6 +20,7 @@ import ButtonPill from "@/components/buttonPill";
 import { useGuardianStore } from "@/store/guardian-store";
 import { ChildProps, GuardianProps, SchoolProps } from "@/types/userType";
 import Loading from "@/components/loading";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "ChildRegister">;
 
@@ -41,6 +42,8 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 	const [address, setAddress] = useState("");
 
 	const [dateOfBirth, setDateOfBirth] = useState("");
+
+	const { user } = useUserStore()
 
 	useEffect(() => {
 		(async () => {
@@ -102,9 +105,11 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 	async function loadGuardians() {
 		try {
-			await api.get("/users/search?role=guardian")
+			await api.get(`/guardians/search?driverId=${user?.id}`)
 				.then(response => {
-					setGuardiansList(response.data)
+					if (response.data.length > 0) {
+						setGuardiansList(response.data)
+					}
 				})
 				.catch(error => {
 					console.log(error)
@@ -119,9 +124,11 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 	async function loadSchools() {
 		try {
-			await api.get("/schools")
+			await api.get(`/schools/search?driverId=${user?.id}`)
 				.then(response => {
-					setSchoolsList(response.data)
+					if (response.data.length > 0) {
+						setSchoolsList(response.data)
+					}
 				})
 				.catch(error => {
 					console.log(error)
@@ -145,7 +152,8 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 			latitude: childLocation.latitude,
 			longitude: childLocation.longitude,
 			guardianId: guardian.id,
-			schoolId: school.id
+			schoolId: school.id,
+			driverId: user?.id
 		} as ChildProps
 		console.log(data)
 		api.post("/childs", data)

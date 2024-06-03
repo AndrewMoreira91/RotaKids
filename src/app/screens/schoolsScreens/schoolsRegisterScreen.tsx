@@ -16,6 +16,7 @@ import Button from "@/components/button";
 import Header from "@/components/header";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SchoolProps } from "@/types/userType";
+import { useUserStore } from "@/store/user-store";
 
 type Props = NativeStackScreenProps<HomeStackParamList, "SchoolsRegister">;
 
@@ -38,6 +39,8 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 	}
 
 	const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
+
+	const { user } = useUserStore()
 
 	useEffect(() => {
 		(async () => {
@@ -85,7 +88,8 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 				name,
 				address,
 				latitude: schoolLocation.latitude,
-				longitude: schoolLocation.longitude
+				longitude: schoolLocation.longitude,
+				driverId: user?.id
 			} as SchoolProps
 			api.post("/schools", data)
 				.then(response => {
