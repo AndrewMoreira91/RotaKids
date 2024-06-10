@@ -1,3 +1,5 @@
+import { calculateOptimizedRoute } from "../routesFunctions/optimizateRoute";
+
 const { AddressValidationClient } = require('@googlemaps/addressvalidation').v1;
 
 export type AddressProps = {
@@ -27,4 +29,17 @@ async function addressValidation({ address }: AddressProps) {
 	}
 }
 
-export default addressValidation;
+async function getRouteOptimized(driverId: string) {
+	try {
+		const routerOptimized = await calculateOptimizedRoute(driverId);
+		return routerOptimized;
+	} catch (error) {
+		console.error(error);
+		return error;
+	}
+}
+
+export const mapController = {
+	addressValidation,
+	getRouteOptimized
+};

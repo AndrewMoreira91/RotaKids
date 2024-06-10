@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client"
 import prisma from "../lib/prima"
 import { ChildProps } from "../types/child.type"
 
@@ -18,28 +19,32 @@ async function createChild(data: ChildProps) {
 	return child
 }
 
-async function getChildById(id: string) {
-	const child = await prisma.child.findUnique({
-		where: {
-			id
-		},
-		select: {
+async function getChildById(id: string, select?: Prisma.ChildSelect) {
+	if (select === undefined) {
+		select = {
 			id: true,
 			name: true,
 			birthDate: true,
 			address: true,
 			latitude: true,
 			longitude: true,
-			guardianId: true
+			guardianId: true,
+			schoolId: true,
 		}
+	}
+	const child = await prisma.child.findUnique({
+		where: {
+			id
+		},
+		select
 	})
 	return child
 }
 
-async function getChilds() {
+async function getChilds(select?: Prisma.ChildSelect) {
 	try {
-		const childs = await prisma.child.findMany({
-			select: {
+		if (select === undefined) {
+			select = {
 				id: true,
 				name: true,
 				birthDate: true,
@@ -48,6 +53,9 @@ async function getChilds() {
 				longitude: true,
 				guardianId: true,
 			}
+		}
+		const childs = await prisma.child.findMany({
+			select
 		})
 		return childs
 	} catch (error) {
@@ -56,11 +64,10 @@ async function getChilds() {
 	}
 }
 
-async function getChildsByParams(params: any) {
+async function getChildsByParams(params: Prisma.ChildWhereInput, select?: Prisma.ChildSelect) {
 	try {
-		const childs = await prisma.child.findMany({
-			where: params,
-			select: {
+		if (select === undefined) {
+			select = {
 				id: true,
 				name: true,
 				birthDate: true,
@@ -68,8 +75,11 @@ async function getChildsByParams(params: any) {
 				latitude: true,
 				longitude: true,
 				guardianId: true,
-				schoolId: true,
 			}
+		}
+		const childs = await prisma.child.findMany({
+			where: params,
+			select
 		})
 		return childs
 	} catch (error) {

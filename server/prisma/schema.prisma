@@ -23,6 +23,9 @@ model Driver {
   guardians Guardian[]
   School    School[]
 
+  routes    DriverRoute[]
+  locations DriverLocation[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
@@ -37,7 +40,7 @@ model Guardian {
   password  String?
 
   driver   Driver @relation(fields: [driverId], references: [id])
-  driverId String @unique
+  driverId String
 
   childs Child[]
 
@@ -49,9 +52,9 @@ model Child {
   id        String   @id @default(cuid())
   name      String
   birthDate DateTime
-  address   String?
-  latitude  Float?
-  longitude Float?
+  address   String
+  latitude  Float
+  longitude Float
 
   school   School @relation(fields: [schoolId], references: [id])
   schoolId String
@@ -59,8 +62,10 @@ model Child {
   guardian   Guardian @relation(fields: [guardianId], references: [id])
   guardianId String
 
-  driver   Driver? @relation(fields: [driverId], references: [id])
-  driverId String?
+  driver   Driver @relation(fields: [driverId], references: [id])
+  driverId String
+
+  routes ChildRoute[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -74,9 +79,69 @@ model School {
   longitude Float
 
   driver   Driver  @relation(fields: [driverId], references: [id])
-  driverId String  @unique
+  driverId String
   childs   Child[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+}
+
+// Modelo Rota
+model Route {
+  id            Int       @id @default(autoincrement())
+  name          String
+  daysOfTheWeek String?
+  startTime     DateTime?
+  endTime       DateTime?
+
+  // Relações
+  halts        Halt[]
+  driverRoutes DriverRoute[]
+  childRoute   ChildRoute[]
+}
+
+// Modelo Parada
+model Halt {
+  id        Int    @id @default(autoincrement())
+  address   String
+  latitude  Float
+  longitude Float
+  order     Int
+
+  // Relações
+  routeId Int
+  route   Route @relation(fields: [routeId], references: [id])
+}
+
+// Modelo MotoristaRota
+model DriverRoute {
+  id       Int    @id @default(autoincrement())
+  driverId String
+  routeId  Int    @map("routeId")
+
+  driver Driver @relation(fields: [driverId], references: [id])
+  route  Route  @relation(fields: [routeId], references: [id])
+}
+
+// Modelo CriancaRota
+model ChildRoute {
+  id      Int    @id @default(autoincrement())
+  childId String
+  routeId Int
+
+  // Relações
+  child Child @relation(fields: [childId], references: [id])
+  route Route @relation(fields: [routeId], references: [id])
+}
+
+// Modelo LocalizaçãoMotorista
+model DriverLocation {
+  id        Int      @id @default(autoincrement())
+  driverId  String
+  latitude  Float
+  longitude Float
+  dataHora  DateTime
+
+  // Relações
+  driver Driver @relation(fields: [driverId], references: [id])
 }
