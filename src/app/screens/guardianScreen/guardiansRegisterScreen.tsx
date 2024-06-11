@@ -30,7 +30,6 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 	const { user } = useUserStore()
 
 	function handleSetFilds(value: string, field: string) {
-		// console.log("Field: ", field, "Value: ", value)
 		if (field === "firstName") {
 			setFirstName(value.trim())
 		}

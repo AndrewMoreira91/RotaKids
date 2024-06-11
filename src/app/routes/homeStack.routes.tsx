@@ -11,6 +11,7 @@ import { GuardianRegisterScreen } from "../screens/guardianScreen/guardiansRegis
 import Header from "@/components/header";
 import { SchoolsScreen } from "../screens/schoolsScreens/schoolsScreen";
 import { SchoolsRegisterScreen } from "../screens/schoolsScreens/schoolsRegisterScreen";
+import { DetailsRouteScreen } from "../screens/driver/detailsRouteScreen";
 
 const Stack = createNativeStackNavigator<HomeStackParamList>()
 
@@ -60,6 +61,10 @@ export default function HomeStack() {
 			<Stack.Screen
 				name="ManageRoutes"
 				component={ManageRoutesScreen}
+			/>
+			<Stack.Screen
+				name="DetailsRoute"
+				component={DetailsRouteScreen}
 			/>
 		</Stack.Navigator>
 	)

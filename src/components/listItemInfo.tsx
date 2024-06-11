@@ -5,9 +5,10 @@ import { Text, View } from "react-native";
 type ListItemInfoProps = {
 	title: string;
 	secondTitle?: string;
+	onPress?: () => void;
 }
 
-function ListItemInfo({ title, secondTitle }: ListItemInfoProps ) {
+function ListItemInfo({ title, secondTitle, onPress }: ListItemInfoProps ) {
 	
 	return (
 		<View className=" w-full py-3 flex-row items-center justify-between">
@@ -15,7 +16,7 @@ function ListItemInfo({ title, secondTitle }: ListItemInfoProps ) {
 				<Text className="font-semibold text-2xl">{title}</Text>
 				{secondTitle && <Text className="font-regular leading-5">{secondTitle}</Text>}
 			</View>
-			<ButtonPill title="Detalhes" />
+			<ButtonPill onPress={onPress} title="Detalhes" />
 		</View>
 	);
 }

@@ -143,7 +143,6 @@ export function ChildsRegisterScreen({ navigation }: Props) {
 
 	function handleSave() {
 		if (!name || !dateOfBirth || !guardian || !school || !childLocation) return;
-		console.log("salvando")
 		setIsLoading(true);
 		const data = {
 			name,

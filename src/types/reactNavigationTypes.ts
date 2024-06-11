@@ -1,4 +1,5 @@
 import { GuardianProps, UserProps } from "./userType";
+import { RouteProps } from "./routeType";
 
 export type AuthStackParamList = {
   InitialAcessPage: undefined;
@@ -16,7 +17,8 @@ export type HomeStackParamList = {
   Payments: undefined;
   Guardians: undefined | { guardian: GuardianProps };
   GuardiansRegister: undefined;
-  ManageRoutes: undefined;
+  ManageRoutes: { routes: RouteProps[] };
+  DetailsRoute: { route: RouteProps };
   Schools: undefined;
   SchoolsRegister: undefined;
 };

@@ -1,23 +1,33 @@
-import { useUserStore } from "@/store/user-store"
-import { router } from "expo-router"
-import { ScrollView, StatusBar, Text, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useEffect, useState } from "react"
 import { FontAwesome } from "@expo/vector-icons"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { ScrollView, StatusBar, Text, View } from "react-native"
+import { router } from "expo-router"
 
 import { colors } from "@/styles/colors"
+import { HomeStackParamList } from "@/types/reactNavigationTypes"
+import { useUserStore } from "@/store/user-store"
+import api from "@/lib/axios"
 
 import Button from "@/components/button"
 import RoutesBox from "@/components/routesBox"
 import ButtonPill from "@/components/buttonPill"
 import ListItem from "@/components/listItem"
 import Divisor from "@/components/divisor"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { HomeStackParamList } from "@/types/reactNavigationTypes"
+import MainConteiner from "@/components/mainConteiner"
+import Loading from "@/components/loading"
+import { RouteProps } from "@/types/routeType"
+import { useRoutesStore } from "@/store/routes-strore"
 
 type Props = NativeStackScreenProps<HomeStackParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
 	const { user, signOut } = useUserStore()
+
+	// const [routes, setRoutes] = useState<RouteProps[]>([])
+	const [isLoading, setIsLoading] = useState(false)
+
+	const { routes, setRoutes } = useRoutesStore()
 
 	if (!user) {
 		signOut()
@@ -25,15 +35,30 @@ export default function HomeScreen({ navigation }: Props) {
 		return null
 	}
 
-	const insets = useSafeAreaInsets()
+	async function loadRoutes() {
+		try {
+			await api.get(`/routes/${user?.id}`)
+				.then(response => {
+					setRoutes(response.data)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+				.finally(() => {
+					setIsLoading(false)
+				})
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	useEffect(() => {
+		setIsLoading(true)
+		loadRoutes()
+	}, [])
 
 	return (
-		<View style={{
-			flex: 1,
-			paddingTop: insets.top,
-			paddingBottom: insets.bottom,
-			backgroundColor: colors.gray[75]
-		}}>
+		<MainConteiner style={{ paddingHorizontal: 0, marginTop: 0 }}>
 			<StatusBar barStyle={"dark-content"} />
 
 			<View className="w-full py-2 px-4 bg-blue-900 flex-row gap-3 items-center">
@@ -67,22 +92,25 @@ export default function HomeScreen({ navigation }: Props) {
 							Suas rotas de hoje
 						</Text>
 
-						<RoutesBox
-							titleRoute="Rota Manhã"
-							schools={3}
-							stops={14}
-							startTime="06:35"
-						/>
-						<RoutesBox
-							titleRoute="Rota Tarde"
-							schools={2}
-							startTime="13:00"
-							stops={8}
-						/>
+						{isLoading && routes === undefined ? <Loading /> :
+							routes.length === 0 ?
+								<Text className="text-ink-light text-lg">
+									Você não tem rotas cadastradas
+								</Text> :
+								routes.map((route, i) => (
+									i < 2 &&
+									<RoutesBox
+										key={route.id}
+										titleRoute={route.name}
+										stops={route.halts.length}
+										startTime="06:35"
+									/>
+								))
+						}
 						<View className="my-2" />
 						<ButtonPill
 							title="Gerenciar rotas"
-							onPress={() => navigation.navigate("ManageRoutes")}
+							onPress={() => navigation.navigate("ManageRoutes", { routes })}
 						/>
 					</View>
 
@@ -122,6 +150,6 @@ export default function HomeScreen({ navigation }: Props) {
 
 				</View>
 			</ScrollView>
-		</View>
+		</MainConteiner>
 	)
 }

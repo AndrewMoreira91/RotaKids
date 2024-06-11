@@ -29,7 +29,7 @@ function Field({ variant="default", ref, ...rest }: TextInputProps & { variant?:
 	return (
 		<TextInput
 			placeholderTextColor={colors.ink.light}
-			className="text-lg self-start items-center justify-center"
+			className="text-lg text-ink-normal self-start items-center justify-center"
 			maxLength={variant === "square" ? 1 : undefined}
 			{...rest}
 		/>

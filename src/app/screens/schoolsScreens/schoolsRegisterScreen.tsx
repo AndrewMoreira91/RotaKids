@@ -82,27 +82,30 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 	}
 
 	function handleSave() {
-		if (name && address && schoolLocation) {
-			setIsLoading(true)
-			const data = {
-				name,
-				address,
-				latitude: schoolLocation.latitude,
-				longitude: schoolLocation.longitude,
-				driverId: user?.id
-			} as SchoolProps
-			api.post("/schools", data)
-				.then(response => {
-					console.log(response.data)
-					navigation.goBack()
-				})
-				.catch(error => {
-					console.log(error)
-					Alert.alert("Erro", "Não foi possível cadastrar a escola, tente novamente mais tarde")
-				})
-				.finally(() => {
-					setIsLoading(false)
-				})
+		try {
+			if (name && address && schoolLocation) {
+				setIsLoading(true)
+				const data = {
+					name,
+					address,
+					latitude: schoolLocation.latitude,
+					longitude: schoolLocation.longitude,
+					driverId: user?.id
+				} as SchoolProps
+				api.post("/schools", data)
+					.then(response => {
+						navigation.goBack()
+					})
+					.catch(error => {
+						console.log(error)
+						Alert.alert("Erro", "Não foi possível cadastrar a escola, tente novamente mais tarde")
+					})
+					.finally(() => {
+						setIsLoading(false)
+					})
+			}
+		} catch (error) {
+			console.log(error)
 		}
 	}
 
