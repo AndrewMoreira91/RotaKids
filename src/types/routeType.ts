@@ -13,4 +13,5 @@ export type HaltProps = {
 	order: number;
 	routeId: number;
 	type: string;
+	name: string;
 }

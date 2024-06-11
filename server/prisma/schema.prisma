@@ -103,12 +103,15 @@ model Route {
 
 // Modelo Parada
 model Halt {
-  id        Int    @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   address   String
   latitude  Float
   longitude Float
   type      String
   order     Int
+  schoolId  String?
+  childId   String?
+  name      String
 
   // Relações
   routeId Int

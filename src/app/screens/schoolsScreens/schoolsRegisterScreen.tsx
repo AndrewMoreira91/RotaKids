@@ -86,7 +86,7 @@ export function SchoolsRegisterScreen({ navigation }: Props) {
 			if (name && address && schoolLocation) {
 				setIsLoading(true)
 				const data = {
-					name,
+					name: name.trim(),
 					address,
 					latitude: schoolLocation.latitude,
 					longitude: schoolLocation.longitude,

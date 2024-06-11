@@ -67,7 +67,7 @@ export function DetailsRouteScreen({ navigation, route }: Props) {
 									<View className="gap-4" key={halt.id}>
 										<View className="flex-row haitems-center justify-between">
 											<View className="flex-auto">
-												<Text className="font-semibold text-xl">{halt.type}</Text>
+												<Text className="font-semibold text-xl">{halt.name}</Text>
 												<Text className="font-regular text-lg">{halt.address}</Text>
 											</View>
 										</View>

@@ -27,7 +27,6 @@ async function getRoutes(driverId: string) {
 	} catch (error) {
 		console.error(error);
 	}
-
 }
 
 async function createRouteOptimized(driverId: string, nameRoute: string) {
@@ -47,6 +46,7 @@ async function createRouteOptimized(driverId: string, nameRoute: string) {
 					order: i + 1,
 					address: halt.address,
 					type: halt.type,
+					name: halt.name
 				} as HaltProps);
 			});
 
@@ -54,6 +54,7 @@ async function createRouteOptimized(driverId: string, nameRoute: string) {
 
 			if (createdDriverRoute) {
 				const routes = await getRoutes(driverId);
+				console.log(routes);
 				return routes;
 			}
 

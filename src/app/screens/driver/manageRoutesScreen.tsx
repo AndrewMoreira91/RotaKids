@@ -36,6 +36,7 @@ export function ManageRoutesScreen({ navigation, route }: Props) {
 		setIsLoading(true)
 		api.post(`/routes/optimize/`, { driverId: user?.id, nameRoute: "Rota 1" })
 			.then(response => {
+				console.log("Response: ", response.data)
 				setRoutes(response.data)
 				navigation.navigate("DetailsRoute", { route: response.data[0] })
 			})

@@ -23,6 +23,7 @@ type Halt = {
 	latitude: number
 	longitude: number
 	address: string
+	name: string
 }
 
 export async function calculateOptimizedRoute(driverId: string, homeAddress?: protos.google.type.ILatLng) {
@@ -63,6 +64,7 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 	if (response[0].routes && response[0].routes[0].visits && response[0].routes[0].transitions) {
 		const selectChildResponse: Prisma.ChildSelect = {
 			id: true,
+			name: true,
 			latitude: true,
 			longitude: true,
 			address: true,
@@ -71,7 +73,8 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 					id: true,
 					latitude: true,
 					longitude: true,
-					address: true
+					address: true,
+					name: true
 				}
 			}
 		};
@@ -88,7 +91,8 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 						schoolId: child.school.id,
 						latitude: child.latitude,
 						longitude: child.longitude,
-						address: child.address
+						address: child.address,
+						name: child.name
 					};
 
 					origionalOrderedRoute.push(halt);
@@ -102,7 +106,8 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 						schoolId: child?.school.id,
 						latitude: child?.school.latitude,
 						longitude: child?.school.longitude,
-						address: child.school.address
+						address: child.school.address,
+						name: child.school.name
 					};
 
 					origionalOrderedRoute.push(halt);
@@ -173,7 +178,6 @@ async function getShipments(driverId: string) {
 		console.error(error);
 	}
 }
-
 
 function removeDuplicateSchools(origionalOrderedRoute: Halt[]) {
 	let previosSchoolId = "";
