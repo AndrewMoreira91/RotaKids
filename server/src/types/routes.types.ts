@@ -8,4 +8,5 @@ export type HaltProps = {
 	longitude: number
 	order: number
 	routeId: number
+	type: string
 }

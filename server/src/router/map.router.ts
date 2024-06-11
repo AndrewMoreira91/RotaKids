@@ -6,7 +6,6 @@ const router = express.Router()
 router
 	.post('/maps/address', async (req, res) => {
 		try {
-			console.log(req.body)
 			const { address }: AddressProps = req.body
 			const result = await mapController.addressValidation({ address })
 			res.status(200).json(result)

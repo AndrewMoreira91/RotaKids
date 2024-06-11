@@ -112,8 +112,8 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 
 		const routeOrdered = removeDuplicateSchools(origionalOrderedRoute);
 
-
 		const transitionResponse = response[0].routes[0].transitions;
+
 		const route = {
 			routeOrder: routeOrdered,
 			transition: transitionResponse.map(transition => {

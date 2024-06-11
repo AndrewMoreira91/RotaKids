@@ -88,11 +88,12 @@ model School {
 
 // Modelo Rota
 model Route {
-  id            Int       @id @default(autoincrement())
-  name          String
-  daysOfTheWeek String?
-  startTime     DateTime?
-  endTime       DateTime?
+  id             Int       @id @default(autoincrement())
+  name           String
+  travelDuration Int?
+  daysOfTheWeek  String?
+  startTime      DateTime?
+  endTime        DateTime?
 
   // Relações
   halts        Halt[]
@@ -106,6 +107,7 @@ model Halt {
   address   String
   latitude  Float
   longitude Float
+  type      String
   order     Int
 
   // Relações
