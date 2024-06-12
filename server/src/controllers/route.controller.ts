@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../lib/prima";
-import { calculateOptimizedRoute } from "../routesFunctions/optimizateRoute";
+import { ChildData, calculateOptimizedRoute } from "../routesFunctions/optimizateRoute";
 import { HaltProps, RouteProps } from "../types/routes.types";
 
 async function getRoutes(driverId: string) {
@@ -29,13 +29,37 @@ async function getRoutes(driverId: string) {
 	}
 }
 
-async function createRouteOptimized(driverId: string, nameRoute: string) {
+async function createRouteOptimized(driverId: string, nameRoute: string, childs?: ChildData[]) {
 	try {
-		if (driverId === undefined) throw new Error("DriverId is required");
+		if (childs === undefined) {
+			childs = await prisma.child.findMany({
+				where: {
+					driverId
+				},
+				select: {
+					id: true,
+					latitude: true,
+					longitude: true,
+					school: {
+						select: {
+							id: true,
+							latitude: true,
+							longitude: true
+						}
+					}
+				}
+			})
+		}
 
-		const optimizedRoute = await calculateOptimizedRoute(driverId);
+		console.log("childs: ", childs);
 
-		const newRoute = await createRoute({ name: nameRoute });
+		const optimizedRoute = await calculateOptimizedRoute(childs);
+
+		console.log("optimizedRoute: ", optimizedRoute);
+
+		const newRoute = await createRoute({
+			name: nameRoute,
+		});
 
 		if (newRoute && optimizedRoute) {
 			optimizedRoute.routeOrder.forEach(async (halt, i) => {
@@ -53,9 +77,13 @@ async function createRouteOptimized(driverId: string, nameRoute: string) {
 			const createdDriverRoute = await createDriverRoute(driverId, newRoute.id);
 
 			if (createdDriverRoute) {
-				const routes = await getRoutes(driverId);
-				console.log(routes);
-				return routes;
+				const route = [{
+					name: newRoute.name,
+					id: newRoute.id,
+					halts: optimizedRoute.routeOrder
+				}]
+				console.log("Route retornada: ", route);
+				return route;
 			}
 
 		} else {

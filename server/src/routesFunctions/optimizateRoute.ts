@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 
 import { childController } from "../controllers/child.controller";
 
-type ChildResponse = {
+export type ChildData = {
 	id: string
 	latitude: number
 	longitude: number
@@ -26,9 +26,12 @@ type Halt = {
 	name: string
 }
 
-export async function calculateOptimizedRoute(driverId: string, homeAddress?: protos.google.type.ILatLng) {
+export async function calculateOptimizedRoute(
+	childs: ChildData[],
+	homeAddress?: protos.google.type.ILatLng,
+) {
 	try {
-		const shipments = await getShipments(driverId);
+		const shipments = await getShipments(childs);
 
 		const homeAddress = {
 			latitude: -23.411893,
@@ -60,7 +63,9 @@ export async function calculateOptimizedRoute(driverId: string, homeAddress?: pr
 	}
 }
 
-async function generateRouteData(response: [protos.google.maps.routeoptimization.v1.IOptimizeToursResponse, protos.google.maps.routeoptimization.v1.IOptimizeToursRequest | undefined, {} | undefined]) {
+async function generateRouteData(
+	response: [protos.google.maps.routeoptimization.v1.IOptimizeToursResponse, protos.google.maps.routeoptimization.v1.IOptimizeToursRequest | undefined, {} | undefined]
+) {
 	if (response[0].routes && response[0].routes[0].visits && response[0].routes[0].transitions) {
 		const selectChildResponse: Prisma.ChildSelect = {
 			id: true,
@@ -80,6 +85,7 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 		};
 
 		let origionalOrderedRoute = []
+		
 		for (let i = 0; i < response[0].routes[0].visits.length; i++) {
 			const visit = response[0].routes[0].visits[i];
 			if (visit.isPickup && visit.shipmentLabel) {
@@ -103,9 +109,9 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 					const halt = {
 						type: "school",
 						childId: visit.shipmentLabel,
-						schoolId: child?.school.id,
-						latitude: child?.school.latitude,
-						longitude: child?.school.longitude,
+						schoolId: child.school.id,
+						latitude: child.school.latitude,
+						longitude: child.school.longitude,
 						address: child.school.address,
 						name: child.school.name
 					};
@@ -117,11 +123,11 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 
 		const routeOrdered = removeDuplicateSchools(origionalOrderedRoute);
 
-		const transitionResponse = response[0].routes[0].transitions;
+		const responseTransitions = response[0].routes[0].transitions;
 
 		const route = {
 			routeOrder: routeOrdered,
-			transition: transitionResponse.map(transition => {
+			transition: responseTransitions.map(transition => {
 				return {
 					travelDuration: transition.travelDuration?.seconds,
 					travelDistanceMeters: transition.travelDistanceMeters,
@@ -130,25 +136,13 @@ async function generateRouteData(response: [protos.google.maps.routeoptimization
 				};
 			})
 		};
+		
 		return route;
 	}
 }
 
-async function getShipments(driverId: string) {
+async function getShipments(childs: ChildData[]) {
 	try {
-		const childs = await childController.getChildsByParams({ driverId }, {
-			id: true,
-			school: {
-				select: {
-					id: true,
-					latitude: true,
-					longitude: true
-				}
-			},
-			latitude: true,
-			longitude: true
-		}) as ChildResponse[];
-
 		if (childs.length > 0) {
 			const shipments = childs.map(child => {
 				const schoolLocation = {

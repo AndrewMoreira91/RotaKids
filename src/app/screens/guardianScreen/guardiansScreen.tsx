@@ -52,6 +52,8 @@ export function GuardiansScreen({ navigation, route }: Props) {
 		}
 	}
 
+	console.log(guardiansList)
+
 	return (
 		<>
 			<Header title="Responsáveis" navigation={navigation} />

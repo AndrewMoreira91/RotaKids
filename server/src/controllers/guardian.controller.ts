@@ -126,6 +126,11 @@ async function getGuardianByParams(params: Prisma.GuardianWhereUniqueInput) {
 				firstName: true,
 				lastName: true,
 				driverId: true,
+				childs: {
+					select: {
+						id: true,
+					}
+				}
 			}
 		})
 		if (guardian !== null) {
