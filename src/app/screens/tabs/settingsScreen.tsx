@@ -22,11 +22,7 @@ export default function SettingsScreen() {
 						<Text className="text-4xl font-bold mb-6">
 							{user.firstName + ' ' + user.lastName}
 						</Text>
-
-						<Text className="text-4xl font-bold mb-6">
-							{user.id}
-						</Text>
-
+						
 						<View className="flex-row justify-between items-center">
 							<FontAwesome name="user-circle" size={24}/>
 							<Text className="font-semibold text-lg">Informações da conta</Text>

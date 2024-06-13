@@ -10,6 +10,7 @@ import BottonSheet, {
   BottomSheetScrollView,
   BottomSheetView
 } from "@gorhom/bottom-sheet"
+
 import MapViewDirections from "react-native-maps-directions"
 import * as Location from 'expo-location';
 
@@ -21,57 +22,29 @@ import { mapStyle } from "@/styles/mapStyle"
 import { useUserStore } from "@/store/user-store"
 
 import Divisor from "@/components/divisor"
-import ListItemDrag from "@/components/listItemDrag"
-import axios from "axios"
 import Button from "@/components/button"
+import { useRoutesStore } from "@/store/routes-strore"
+import ButtonPill from "@/components/buttonPill"
+import { RouteProps } from "@/types/routeType"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import { FontAwesome5 } from "@expo/vector-icons"
 
 
 export default function MapScreen() {
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
 
   const [isLoading, setIsLoading] = useState(true)
-  const [showsTraffic, setShowsTraffic] = useState(true)
+  const [showsTraffic, setShowsTraffic] = useState(false)
 
   const { user } = useUserStore()
 
-  const [childsList, setChildsList] = useState<ChildProps[]>([])
-  const [schoolsList, setSchoolsList] = useState<SchoolProps[]>([])
-
   const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
 
-  async function loadSchools() {
-    try {
-      await api.get(`/schools/search?driverId=${user?.id}`)
-        .then(response => {
-          setSchoolsList(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { routes } = useRoutesStore()
 
-  async function loadChilds() {
-    try {
-      await api.get(`/childs/search?driverId=${user?.id}`)
-        .then(response => {
-          setChildsList(response.data)
-        })
-        .catch(error => {
-          console.log(error)
-        })
-        .finally(() => {
-          setIsLoading(false)
-        })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const [selectedRoute, setSelectedRoute] = useState<RouteProps | null>(null)
+
+  const mapRef = useRef<MapView>(null)
 
   useEffect(() => {
     (async () => {
@@ -90,43 +63,24 @@ export default function MapScreen() {
     })();
   }, []);
 
+  function moveCameraToLocation() {
+    if (location === null) return
+    mapRef.current?.animateCamera({
+      center: location,
+      zoom: 14,
+    })
+  }
+
   {
     const bottomSheetRef = useRef<BottonSheet>(null)
     const snapPoints = useMemo(() => ["5%", "50%", "90%"], [])
-    const handleClosePress = () => bottomSheetRef.current?.close()
-
-    const handleSnapPress = () => bottomSheetRef.current?.snapToIndex(1)
-
-    const url = "https://api.mapbox.com/optimized-trips/v1/mapbox/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219;13.418555,52.523215?roundtrip=true&distributions=3,1&access_token=pk.eyJ1IjoiYW5kcmV3bW9yZWlyYSIsImEiOiJjbHgzM3BjdGMwZG5yMnFvdDAxdG92YWFiIn0.lvQlpcf6iJyGEMwrYIoKdA"
-
-    // async function getRoute() {
-    //   const response = await axios.get(url)
-    //     .then(response => {
-    //       console.dir(response.data, { depth: null });
-    //       const resWayPoints: { waypoints: { location: number[] }[] } = response.data.waypoints
-    //       waypoints = resWayPoints.waypoints.map(waypoint => ({
-    //         latitude: waypoint.location[1],
-    //         longitude: waypoint.location[0]
-    //       }))
-    //       return waypoints;
-    //     })
-    //     .catch(error => {
-    //       console.log(error);
-    //       return waypoints;
-    //     });
-    //   return response;
-    // }
-
-    useEffect(() => {
-      loadChilds()
-      loadSchools()
-    }, [])
 
     return (
       <View style={styles.conteiner}>
 
         {location &&
           <MapView
+            ref={mapRef}
             provider={PROVIDER_GOOGLE}
             style={styles.mapContainer}
             initialCamera={{
@@ -136,55 +90,69 @@ export default function MapScreen() {
               heading: 0,
               altitude: 0
             }}
-            // onRegionChange={(region) => setRegion(region)}
             zoomControlEnabled
             showsUserLocation
             pitchEnabled
             customMapStyle={mapStyle}
+            userLocationUpdateInterval={1000}
             showsTraffic={showsTraffic}
             loadingEnabled
           >
-            {schoolsList.map(school => (
-              <Marker
-                key={school.id}
-                coordinate={{
-                  latitude: school.latitude,
-                  longitude: school.longitude
-                }}
-                title={school.name}
-                description={school.address}
-                pinColor={colors.blue[300]}
-              />
-            ))}
-            {childsList.map(child => (
-              <Marker
-                key={child.id}
-                coordinate={{
-                  latitude: child.latitude,
-                  longitude: child.longitude
-                }}
-                title={child.name}
-                description={child.address}
-                pinColor={colors.lime[300]}
-              />
-            ))}
-            {childsList.length > 0 && schoolsList.length > 0 &&
+            {selectedRoute &&
+              selectedRoute.halts.map(halt => (
+                <Marker
+                  key={halt.id}
+                  coordinate={{
+                    latitude: halt.latitude,
+                    longitude: halt.longitude
+                  }}
+                  title={halt.name}
+                  description={halt.address}
+                >
+                  <View>
+                    <View className="bg-slate-50 border p-1 justify-center items-center rounded-lg">
+                      <Text className="text-lg font-bold">{halt.order}</Text>
+                    </View>
+                    {halt.type === 'school' ? <FontAwesome5 name="school" size={32} color={colors.ink.normal} /> :
+                      <FontAwesome5 name="child" size={32} color={colors.blue[500]} />
+                    }
+                  </View>
+                </Marker>
+              ))}
+
+            <Marker
+              coordinate={{
+                latitude: location.latitude,
+                longitude: location.longitude
+              }}
+              title="Você"
+              description="Sua localização"
+            >
+              <FontAwesome5 name="home" size={32} color={colors.blue[900]} />
+            </Marker>
+
+            {selectedRoute &&
               <MapViewDirections
                 apikey={"AIzaSyCmpVIPiRg3d3lBp96yC9xWd80iz2w262w"}
                 origin={location}
-                destination={{
-                  latitude: schoolsList[0].latitude,
-                  longitude: schoolsList[0].longitude
-                }}
+                destination={location}
                 strokeWidth={4}
                 strokeColor="blue"
                 mode="DRIVING"
                 lineCap="round"
-                waypoints={childsList.map(child => ({
-                  latitude: child.latitude,
-                  longitude: child.longitude
+                waypoints={selectedRoute.halts.map(halt => ({
+                  latitude: halt.latitude,
+                  longitude: halt.longitude,
                 }))}
                 optimizeWaypoints
+                onStart={(params) => {
+                  console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                }}
+                onReady={(result) => {
+                  console.log(`Distance: ${result.distance} km`)
+                  console.log(`Duration: ${result.duration} min.`)
+                }}
+                precision="high"
               />}
           </MapView>
         }
@@ -196,24 +164,90 @@ export default function MapScreen() {
         >
           <BottomSheetDraggableView>
             <View className="items-center">
-              <Text className="font-bold text-2xl">Gerenciar paradas</Text>
+              <Text className="font-bold text-2xl">Iniciar rota</Text>
               <Divisor style={{ marginVertical: 8 }} />
             </View>
 
             <View className="flex-col justify-between px-4" >
-              <Text className="text-lg font-semibold">Tempo total da rota:
-                <Text className="font-bold"> 2:35h</Text>
-              </Text>
 
-              <Text className="text-base mt-2 text-blue-500">Próxima parada</Text>
 
-              <FlatList
-                data={childsList}
-                renderItem={({ item }) => (
-                  <ListItemDrag name={item.name} />
-                )}
-                keyExtractor={(item) => item.id.toString()}
-              />
+              {selectedRoute ?
+                <View className="flex-col">
+                  <View className="flex-row gap-4 items-center">
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => setSelectedRoute(null)}
+                    >
+                      <FontAwesome5 name="arrow-left" size={24} color={colors.blue[500]} />
+                    </TouchableOpacity>
+                    <Text className="font-semibold text-lg">
+                      Voltar para as rotas
+                    </Text>
+                  </View>
+                  <View className="mt-2">
+                    <View className="flex-row justify-between items-end pb-1">
+                      <Text className="text-3xl font-semibold">
+                        {selectedRoute.name}
+                      </Text>
+                      <Text className="text-lg">
+                        {selectedRoute.halts.length} paradas
+                      </Text>
+                    </View>
+                    <Button>
+                      <Button.Text title="Começar" />
+                    </Button>
+
+                    <BottomSheetFlatList
+                      data={selectedRoute.halts}
+                      key={selectedRoute.id}
+                      renderItem={({ item }) => (
+                        <View className="flex-row justify-between items-center">
+                          <View className="flex-col">
+                            <Text className="text-lg font-semibold text-blue-900">
+                              {item.name}
+                            </Text>
+                            <Text className="text-sm">
+                              {item.address}
+                            </Text>
+                          </View>
+                          <ButtonPill
+                            title="Iniciar"
+                            onPress={() => { }}
+                          />
+                        </View>
+                      )}
+                    />
+                  </View>
+                </View>
+                :
+                <View>
+                  <Text className="text-xl font-regular">
+                    Inicie uma rota:
+                  </Text>
+                  {routes.map(route => (
+                    <View key={route.id}>
+                      <View
+                        className="flex-row mb-3 justify-between items-center"
+                      >
+                        <View>
+                          <Text className="text-3xl font-bold text-blue-900">
+                            {route.name}
+                          </Text>
+                          <Text className="text-lg">
+                            {route.halts.length} paradas
+                          </Text>
+                        </View>
+                        <ButtonPill
+                          title="Iniciar"
+                          onPress={() => setSelectedRoute(route)}
+                        />
+                      </View>
+                      <Divisor />
+                    </View>
+                  ))}
+                </View>
+              }
+
             </View>
           </BottomSheetDraggableView>
         </BottonSheet>
