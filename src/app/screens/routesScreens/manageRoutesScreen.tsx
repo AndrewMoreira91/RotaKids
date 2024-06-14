@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlatList, StatusBar, Text, View } from "react-native";
+import { Alert, FlatList, StatusBar, Text, View } from "react-native";
 
 import { HomeStackParamList } from "@/types/reactNavigationTypes";
 
@@ -32,11 +32,14 @@ export function ManageRoutesScreen({ navigation, route }: Props) {
 
 	const { user } = useUserStore()
 
-	function handleGererateRoute() {
+	function handleGenerateRoute() {
 		setIsLoading(true)
 		api.post(`/routes/optimize/`, { driverId: user?.id, nameRoute: "Rota 1" })
 			.then(response => {
 				console.log("Response: ", response.data)
+				if (response.data === "No childs found") {
+					return Alert.alert("Erro", "Precisa ter cadastrado pelo menos uma criança para gerar uma rota automaticamente")
+				}
 				setRoutes(response.data)
 				navigation.navigate("DetailsRoute", { route: response.data[0] })
 			})
@@ -64,7 +67,7 @@ export function ManageRoutesScreen({ navigation, route }: Props) {
 								Você pode gerar uma rota automaticamente com base nas crianças cadastradas, ou adicionar uma rota manualmente.
 							</Text>
 
-							<Button onPress={handleGererateRoute} isLoading={isLoading}>
+							<Button onPress={handleGenerateRoute} isLoading={isLoading}>
 								<Button.Text title="Gerar rota automaticamente" />
 							</Button>
 						</>

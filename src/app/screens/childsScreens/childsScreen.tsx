@@ -63,6 +63,7 @@ export function ChildsScreen({ navigation }: Props) {
 									<ListItemInfo
 										title={child.name}
 										secondTitle={formatDate(child.birthDate)}
+										onPress={() => navigation.navigate("DetailsChild", { child })}
 									/>
 									<Divisor />
 								</View>

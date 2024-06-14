@@ -24,7 +24,7 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 	const [firstName, setFirstName] = useState<string>("");
 	const [lastName, setLastName] = useState<string>("");
 
-	const [isDisabled, setIsDisabled] = useState<boolean>(true);
+	const [isDisabled, setIsDisabled] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const { user } = useUserStore()
@@ -64,6 +64,8 @@ export function GuardianRegisterScreen({ navigation }: Props) {
 				phone,
 				driverId: user?.id
 			} as GuardianProps
+
+			console.log(data)
 
 			await api.post("/guardians", data)
 				.then(response => {

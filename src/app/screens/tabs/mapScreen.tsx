@@ -1,25 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import MapView, {
   Marker,
-  PROVIDER_GOOGLE
+  PROVIDER_GOOGLE,
 } from "react-native-maps"
 import BottonSheet, {
   BottomSheetDraggableView,
   BottomSheetFlatList,
-  BottomSheetScrollView,
-  BottomSheetView
 } from "@gorhom/bottom-sheet"
 
 import MapViewDirections from "react-native-maps-directions"
 import * as Location from 'expo-location';
 
-import api from "@/lib/axios"
-import { ChildProps, SchoolProps } from "@/types/userType"
-
 import { colors } from "@/styles/colors"
-import { mapStyle } from "@/styles/mapStyle"
-import { useUserStore } from "@/store/user-store"
 
 import Divisor from "@/components/divisor"
 import Button from "@/components/button"
@@ -27,16 +20,13 @@ import { useRoutesStore } from "@/store/routes-strore"
 import ButtonPill from "@/components/buttonPill"
 import { RouteProps } from "@/types/routeType"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import { FontAwesome5 } from "@expo/vector-icons"
-
+import { FontAwesome5, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons"
 
 export default function MapScreen() {
   const API_KEY = process.env.GOOGLE_MAPS_API_KEY || ''
 
   const [isLoading, setIsLoading] = useState(true)
   const [showsTraffic, setShowsTraffic] = useState(false)
-
-  const { user } = useUserStore()
 
   const [location, setLocation] = useState<{ latitude: number, longitude: number } | null>(null);
 
@@ -63,14 +53,6 @@ export default function MapScreen() {
     })();
   }, []);
 
-  function moveCameraToLocation() {
-    if (location === null) return
-    mapRef.current?.animateCamera({
-      center: location,
-      zoom: 14,
-    })
-  }
-
   {
     const bottomSheetRef = useRef<BottonSheet>(null)
     const snapPoints = useMemo(() => ["5%", "50%", "90%"], [])
@@ -93,7 +75,6 @@ export default function MapScreen() {
             zoomControlEnabled
             showsUserLocation
             pitchEnabled
-            customMapStyle={mapStyle}
             userLocationUpdateInterval={1000}
             showsTraffic={showsTraffic}
             loadingEnabled
@@ -110,10 +91,11 @@ export default function MapScreen() {
                   description={halt.address}
                 >
                   <View>
-                    <View className="bg-slate-50 border p-1 justify-center items-center rounded-lg">
+                    <View className="bg-slate-50 aspect-square justify-center items-center border">
                       <Text className="text-lg font-bold">{halt.order}</Text>
                     </View>
-                    {halt.type === 'school' ? <FontAwesome5 name="school" size={32} color={colors.ink.normal} /> :
+                    {halt.type === 'school' ? 
+                      <MaterialIcons  name="school" size={32} color={colors.blue[900]}/> :
                       <FontAwesome5 name="child" size={32} color={colors.blue[500]} />
                     }
                   </View>
@@ -221,9 +203,20 @@ export default function MapScreen() {
                 </View>
                 :
                 <View>
-                  <Text className="text-xl font-regular">
-                    Inicie uma rota:
-                  </Text>
+                  {routes.length === 0 ? (
+                    <View className="gap-4 mb-20">
+                      <Text className="font-bold text-2xl">
+                        Você não tem nenhuma rota cadastrada
+                      </Text>
+                      <Text className="text-gray-800 text-base">
+                        Você pode gerar uma rota automaticamente, ou adicionar uma rota manualmente na tela de gerenciamento de rotas.
+                      </Text>
+                    </View>)
+                    :
+                    <Text className="text-xl font-regular">
+                      Inicie uma rota:
+                    </Text>}
+
                   {routes.map(route => (
                     <View key={route.id}>
                       <View

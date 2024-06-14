@@ -49,6 +49,10 @@ async function createRouteOptimized(driverId: string, nameRoute: string, childs?
 					}
 				}
 			})
+
+			if (childs.length === 0) {
+				return "No childs found";
+			}
 		}
 
 		console.log("childs: ", childs);

@@ -1,4 +1,4 @@
-import { GuardianProps, UserProps } from "./userType";
+import { ChildProps, GuardianProps, UserProps } from "./userType";
 import { RouteProps } from "./routeType";
 
 export type AuthStackParamList = {
@@ -14,6 +14,7 @@ export type HomeStackParamList = {
   Home: undefined;
   Childs: undefined;
   ChildRegister: undefined;
+  DetailsChild: { child: ChildProps};
   Payments: undefined;
   Guardians: undefined | { guardian: GuardianProps };
   GuardiansRegister: undefined;

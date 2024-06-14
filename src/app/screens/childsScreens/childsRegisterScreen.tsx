@@ -17,7 +17,6 @@ import MapView, { Marker } from "react-native-maps";
 
 import api from "@/lib/axios";
 import ButtonPill from "@/components/buttonPill";
-import { useGuardianStore } from "@/store/guardian-store";
 import { ChildProps, GuardianProps, SchoolProps } from "@/types/userType";
 import Loading from "@/components/loading";
 import { useUserStore } from "@/store/user-store";
